@@ -28,6 +28,11 @@ interface BlibliJobDetail {
   department: string;
 }
 
+interface BlibliApiResponse<T> {
+  responseObject: T;
+  status: { code: number; desc: string };
+}
+
 export class BlibliCrawler extends BaseCrawler {
   source = "Blibli" as const;
   name = "Blibli";
@@ -51,7 +56,7 @@ export class BlibliCrawler extends BaseCrawler {
         throw new Error(`Blibli API responded with status ${response.status}`);
       }
 
-      const data = (await response.json()) as BlibliJob[];
+      const { responseObject: data } = (await response.json()) as BlibliApiResponse<BlibliJob[]>;
 
       // Filter for engineering department before fetching details
       const engineeringJobs = data.filter((job) => this.isEngineeringDepartment(job.department));
@@ -59,9 +64,6 @@ export class BlibliCrawler extends BaseCrawler {
       for (const item of engineeringJobs) {
         try {
           const detail = await this.fetchDetail(item.jobCode);
-          if (!(detail.postingDate && this.isWithinHours(detail.postingDate, 24))) {
-            continue;
-          }
 
           const slug = item.jobName.toLowerCase().replaceAll(/\s+/g, "-");
           const rawDescription = this.stripHtml(detail.jobSummary || item.jobSummary);
@@ -108,7 +110,8 @@ export class BlibliCrawler extends BaseCrawler {
       throw new Error(`Blibli detail API responded with status ${response.status}`);
     }
 
-    return (await response.json()) as BlibliJobDetail;
+    const { responseObject } = (await response.json()) as BlibliApiResponse<BlibliJobDetail>;
+    return responseObject;
   }
 
   private isEngineeringDepartment(department: string): boolean {

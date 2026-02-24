@@ -53,7 +53,7 @@ export interface JSearchJob {
   job_city: string;
   job_state: string;
   job_country: string;
-  job_description: string;
+  job_description: string | null;
   job_apply_link: string;
   job_is_remote: boolean;
   job_posted_at_datetime_utc: string;
@@ -285,6 +285,8 @@ export interface CompanyConfig {
   platform: CompanyPlatform;
   token: string;
   size?: string;
+  /** Skip 24h posting-date filter — useful for APIs with unreliable or missing dates */
+  skipDateFilter?: boolean;
 }
 
 // ─── Sheet Column Order ──────────────────────────────────────────────

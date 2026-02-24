@@ -41,11 +41,11 @@ try {
   ];
 
   // JSearch requires API key — only add if configured
-  const rapidApiKey = process.env.RAPIDAPI_KEY;
-  if (rapidApiKey) {
-    crawlers.push(new JSearchCrawler(rapidApiKey));
+  const jsearchApiKey = process.env.OPENWEBNINJA_API_KEY || process.env.RAPIDAPI_KEY;
+  if (jsearchApiKey) {
+    crawlers.push(new JSearchCrawler(jsearchApiKey));
   } else {
-    console.log("RAPIDAPI_KEY not set — skipping JSearch crawler");
+    console.log("OPENWEBNINJA_API_KEY not set — skipping JSearch crawler");
   }
 
   // 4. Run all crawlers concurrently

@@ -27,12 +27,14 @@ export class JSearchCrawler extends BaseCrawler {
           num_pages: "1",
         });
 
-        const response = await fetch(`https://jsearch.p.rapidapi.com/search?${params.toString()}`, {
-          headers: {
-            "X-RapidAPI-Key": this.apiKey,
-            "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
+        const response = await fetch(
+          `https://api.openwebninja.com/jsearch/search?${params.toString()}`,
+          {
+            headers: {
+              "x-api-key": this.apiKey,
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error(
@@ -49,6 +51,7 @@ export class JSearchCrawler extends BaseCrawler {
         for (const job of recentJobs) {
           const location = this.buildLocation(job);
 
+          const description = job.job_description ?? "";
           const enriched = this.enrichJob({
             dateFound: this.todayISO(),
             title: job.job_title,
@@ -61,9 +64,9 @@ export class JSearchCrawler extends BaseCrawler {
               job.job_salary_currency,
               job.job_salary_period,
             ),
-            description: this.truncateDescription(job.job_description),
+            description: this.truncateDescription(description),
             source: "JSearch",
-            rawDescription: job.job_description,
+            rawDescription: description,
             employerType: job.employer_company_type,
           });
 

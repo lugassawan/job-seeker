@@ -42,10 +42,6 @@ export class BankNeoCrawler extends BaseCrawler {
       const data = (await response.json()) as BankNeoResponse;
 
       for (const item of data.datas) {
-        if (!this.isWithinHours(item.created_at, 24)) {
-          continue;
-        }
-
         const enriched = this.enrichJob({
           dateFound: this.todayISO(),
           title: item.title,
