@@ -15,6 +15,9 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Consensys", platform: "greenhouse", token: "consensys", size: "Mid-size" },
   { name: "Modern Health", platform: "greenhouse", token: "modernhealth", size: "Mid-size" },
   { name: "ReCharge", platform: "greenhouse", token: "recharge", size: "Mid-size" },
+  { name: "Xendit", platform: "greenhouse", token: "xendit", size: "Mid-size" },
+  { name: "Agoda", platform: "greenhouse", token: "agoda", size: "Enterprise" },
+  { name: "Twilio", platform: "greenhouse", token: "twilio", size: "Enterprise" },
 
   // Lever companies
   { name: "Netflix", platform: "lever", token: "netflix", size: "Enterprise" },
@@ -22,6 +25,7 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Kraken", platform: "lever", token: "kraken", size: "Enterprise" },
   { name: "Medium", platform: "lever", token: "medium", size: "Mid-size" },
   { name: "Skillshare", platform: "lever", token: "skillshare", size: "Mid-size" },
+  { name: "Tiket", platform: "lever", token: "tiket", size: "Mid-size" },
 
   // Ashby companies
   { name: "Notion", platform: "ashby", token: "notion", size: "Mid-size" },
@@ -31,6 +35,14 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
 
   // Workable companies
   { name: "Employment Hero", platform: "workable", token: "employment-hero", size: "Mid-size" },
+  { name: "Ajaib", platform: "workable", token: "ajaib", size: "Mid-size" },
+  { name: "Stockbit", platform: "workable", token: "stockbit", size: "Mid-size" },
+  { name: "Traveloka", platform: "workable", token: "traveloka", size: "Enterprise" },
+  { name: "Dana", platform: "workable", token: "dana-indonesia", size: "Mid-size" },
+  { name: "Halodoc", platform: "workable", token: "halodoc", size: "Mid-size" },
+  { name: "Kredivo", platform: "workable", token: "finaccel", size: "Mid-size" },
+  { name: "Mitrais", platform: "workable", token: "mitrais", size: "Mid-size" },
+  { name: "TabSquare", platform: "workable", token: "tabsquare", size: "Mid-size" },
 
   // WordPress (WP Job Openings) companies
   { name: "Bookipi", platform: "wordpress", token: "bookipi.com", size: "Startup" },
