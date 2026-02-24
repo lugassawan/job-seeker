@@ -1,5 +1,6 @@
 import type { BaseCrawler } from "./crawlers/base.ts";
 import { CompanyDirectCrawler } from "./crawlers/company-direct.ts";
+import { JapanDevCrawler } from "./crawlers/japandev.ts";
 import { JSearchCrawler } from "./crawlers/jsearch.ts";
 import { RemoteOKCrawler } from "./crawlers/remoteok.ts";
 import { RemotiveCrawler } from "./crawlers/remotive.ts";
@@ -26,6 +27,7 @@ try {
     new RemoteOKCrawler(),
     new RemotiveCrawler(),
     new CompanyDirectCrawler(),
+    new JapanDevCrawler(),
   ];
 
   // JSearch requires API key — only add if configured
@@ -74,7 +76,10 @@ try {
     console.log("No new jobs to add");
   }
 
-  // 9. Report errors
+  // 9. Apply sheet formatting (after append so data rows are reset)
+  await sheets.applyFormatting();
+
+  // 10. Report errors
   if (allErrors.length > 0) {
     console.log(`\nErrors (${allErrors.length}):`);
     for (const error of allErrors) {
