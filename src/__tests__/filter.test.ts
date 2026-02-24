@@ -75,6 +75,15 @@ describe("isRelevantJob", () => {
   ])("rejects non-matching title: %s", (title) => {
     expect(isRelevantJob(makeJob({ title, requiredSkills: "" }))).toBe(false);
   });
+
+  test.each([
+    "Quality Assurance Software Engineer",
+    "QA Software Engineer",
+    "Senior QA Backend Engineer",
+    "QA Fullstack Developer",
+  ])("rejects QA title even with engineering keywords: %s", (title) => {
+    expect(isRelevantJob(makeJob({ title }))).toBe(false);
+  });
 });
 
 // ─── isExcludedLocation ─────────────────────────────────────────────

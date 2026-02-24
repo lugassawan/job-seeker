@@ -10,6 +10,8 @@ import type {
   SmartRecruitersJob,
   SmartRecruitersJobDetail,
   SmartRecruitersResponse,
+  TeamtailorDetailResponse,
+  TeamtailorListResponse,
   WordPressJob,
   WorkableJob,
   WorkableJobDetail,
@@ -388,6 +390,89 @@ export class CompanyDirectCrawler extends BaseCrawler {
     return "Mid";
   }
 
+  private async crawlTeamtailor(company: CompanyConfig): Promise<Job[]> {
+    const baseUrl = `https://${company.token}/api/v2/jobs`;
+
+    // Fetch first page to get total page count
+    const firstPage = await this.fetchTeamtailorPage(baseUrl, 1);
+    const pageCount = firstPage.meta["page-count"];
+
+    // Fetch remaining pages concurrently
+    const pagePromises: Promise<TeamtailorListResponse>[] = [];
+    for (let page = 2; page <= pageCount; page++) {
+      pagePromises.push(this.fetchTeamtailorPage(baseUrl, page));
+    }
+    const remainingPages = await Promise.all(pagePromises);
+
+    const allJobs = [...firstPage.data, ...remainingPages.flatMap((p) => p.data)];
+
+    const filtered = allJobs.filter((job) => this.isEngineeringDepartment(job.department));
+
+    const jobs: Job[] = [];
+    for (const job of filtered) {
+      let description = "";
+      let rawDescription = "";
+      try {
+        const detail = await this.fetchTeamtailorDetail(baseUrl, job.id);
+        rawDescription = this.stripHtml(detail.description);
+        description = this.truncateDescription(detail.description);
+      } catch {
+        description = job.title;
+        rawDescription = job.title;
+      }
+
+      const location = [job.city, job.region].filter(Boolean).join(", ") || "Remote";
+
+      const enriched = this.enrichJob({
+        dateFound: this.todayISO(),
+        title: job.title,
+        company: company.name,
+        location,
+        url: `https://${company.token}/jobs/${job.id}`,
+        salary: job.salary || "",
+        description,
+        source: "Teamtailor",
+        rawDescription,
+        employerType: null,
+      });
+      enriched.companySize = company.size || "";
+      jobs.push(enriched);
+    }
+
+    return jobs;
+  }
+
+  private async fetchTeamtailorPage(
+    baseUrl: string,
+    page: number,
+  ): Promise<TeamtailorListResponse> {
+    const response = await fetch(`${baseUrl}?page=${page}`, {
+      headers: { Accept: "application/json", "User-Agent": this.userAgent },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Teamtailor API responded with status ${response.status}`);
+    }
+
+    return (await response.json()) as TeamtailorListResponse;
+  }
+
+  private async fetchTeamtailorDetail(
+    baseUrl: string,
+    jobId: string,
+  ): Promise<TeamtailorDetailResponse["data"]> {
+    const response = await fetch(`${baseUrl}/${jobId}`, {
+      headers: { Accept: "application/json", "User-Agent": this.userAgent },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Teamtailor detail API responded with status ${response.status}`);
+    }
+
+    const json = (await response.json()) as TeamtailorDetailResponse;
+    return json.data;
+  }
+
   private extractWordPressLocation(content: string): string {
     const lower = content.toLowerCase();
     if (lower.includes("remote")) {
@@ -422,6 +507,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
             break;
           case "smartrecruiters":
             companyJobs = await this.crawlSmartRecruiters(company);
+            break;
+          case "teamtailor":
+            companyJobs = await this.crawlTeamtailor(company);
             break;
         }
 

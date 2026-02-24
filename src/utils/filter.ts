@@ -12,6 +12,8 @@ const RELEVANT_KEYWORDS: string[] = [
   "full stack",
 ];
 
+const EXCLUDED_TITLE_PATTERNS: RegExp[] = [/\bquality\s+assurance\b/i, /\bqa\b/i];
+
 /**
  * Matches "India" and its standalone ISO-alpha-2 code "IN".
  * The word-boundary anchors (\b) ensure "IN" only matches as a
@@ -26,6 +28,9 @@ const EXCLUDED_LOCATION_PATTERNS: RegExp[] = [/\bindia\b/i, /\bIN\b/];
  * least one software-engineering keyword (case-insensitive).
  */
 export function isRelevantJob(job: Job): boolean {
+  if (EXCLUDED_TITLE_PATTERNS.some((pattern) => pattern.test(job.title))) {
+    return false;
+  }
   const haystack = `${job.title} ${job.requiredSkills}`.toLowerCase();
   return RELEVANT_KEYWORDS.some((kw) => haystack.includes(kw));
 }

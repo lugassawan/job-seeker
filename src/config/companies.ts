@@ -50,8 +50,8 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Ajaib", platform: "workable", token: "ajaib", size: "Mid-size", skipDateFilter: true },
   {
     name: "Stockbit",
-    platform: "workable",
-    token: "stockbit",
+    platform: "teamtailor",
+    token: "careers.stockbit.com",
     size: "Mid-size",
     skipDateFilter: true,
   },

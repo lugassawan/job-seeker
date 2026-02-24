@@ -30,6 +30,7 @@ export type JobSource =
   | "TechInAsia"
   | "Kalibrr"
   | "SmartRecruiters"
+  | "Teamtailor"
   | "Blibli"
   | "BankNeo";
 
@@ -270,6 +271,38 @@ export interface SmartRecruitersJobDetail {
   };
 }
 
+// ─── Teamtailor API Types ───────────────────────────────────────────
+
+export interface TeamtailorJob {
+  id: string;
+  title: string;
+  "employment-type": string;
+  region: string;
+  city: string;
+  department: string;
+  salary: string;
+}
+
+export interface TeamtailorJobDetail {
+  id: string;
+  title: string;
+  "employment-type": string;
+  region: string;
+  city: string;
+  department: string;
+  description: string;
+  salary: string;
+}
+
+export interface TeamtailorListResponse {
+  data: TeamtailorJob[];
+  meta: { "record-count": number; "page-count": number };
+}
+
+export interface TeamtailorDetailResponse {
+  data: TeamtailorJobDetail;
+}
+
 // ─── Company Config Types ────────────────────────────────────────────
 
 export type CompanyPlatform =
@@ -278,7 +311,8 @@ export type CompanyPlatform =
   | "ashby"
   | "workable"
   | "wordpress"
-  | "smartrecruiters";
+  | "smartrecruiters"
+  | "teamtailor";
 
 export interface CompanyConfig {
   name: string;
