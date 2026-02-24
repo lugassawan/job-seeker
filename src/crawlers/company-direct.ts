@@ -7,6 +7,10 @@ import type {
   Job,
   JobSource,
   LeverJob,
+  WorkableJob,
+  WorkableJobDetail,
+  WorkableResponse,
+  WordPressJob,
 } from "../types.ts";
 import { BaseCrawler } from "./base.ts";
 
@@ -146,6 +150,143 @@ export class CompanyDirectCrawler extends BaseCrawler {
     });
   }
 
+  private async crawlWorkable(company: CompanyConfig): Promise<Job[]> {
+    const response = await fetch(
+      `https://apply.workable.com/api/v1/widget/accounts/${company.token}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(`Workable API responded with status ${response.status} for ${company.name}`);
+    }
+
+    const data = (await response.json()) as WorkableResponse;
+
+    // Deduplicate by shortcode (same job listed for multiple locations)
+    const seen = new Set<string>();
+    const unique: WorkableJob[] = [];
+    for (const job of data.jobs) {
+      if (!seen.has(job.shortcode)) {
+        seen.add(job.shortcode);
+        unique.push(job);
+      }
+    }
+
+    const filtered = unique.filter((job) => {
+      const isRemote = job.telecommuting === true;
+      const isEngineering = this.isEngineeringDepartment(job.department || "");
+      const isRecent = this.isWithinHours(job.published_on, 24);
+      return isRemote && isEngineering && isRecent;
+    });
+
+    // Fetch full descriptions from v2 detail endpoint
+    const jobs: Job[] = [];
+    for (const job of filtered) {
+      let description = "";
+      let rawDescription = "";
+      try {
+        const detail = await this.fetchWorkableDetail(company.token, job.shortcode);
+        rawDescription = this.stripHtml(detail.description);
+        description = this.truncateDescription(detail.description);
+      } catch {
+        // Fall back to title-only if detail fetch fails
+        description = job.title;
+        rawDescription = job.title;
+      }
+
+      const location = [job.city, job.country].filter(Boolean).join(", ") || "Remote";
+
+      const enriched = this.enrichJob({
+        dateFound: this.todayISO(),
+        title: job.title,
+        company: company.name,
+        location,
+        url: job.url,
+        salary: "",
+        description,
+        source: "Workable",
+        rawDescription,
+        employerType: null,
+      });
+
+      // Use Workable's experience field if available
+      if (job.experience) {
+        enriched.experienceLevel = this.mapWorkableExperience(job.experience);
+      }
+      enriched.companySize = company.size || "";
+      jobs.push(enriched);
+    }
+
+    return jobs;
+  }
+
+  private async fetchWorkableDetail(token: string, shortcode: string): Promise<WorkableJobDetail> {
+    const response = await fetch(
+      `https://apply.workable.com/api/v2/accounts/${token}/jobs/${shortcode}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(`Workable detail API responded with status ${response.status}`);
+    }
+
+    return (await response.json()) as WorkableJobDetail;
+  }
+
+  private mapWorkableExperience(experience: string): string {
+    const lower = experience.toLowerCase();
+    if (lower.includes("senior") || lower.includes("director") || lower.includes("executive")) {
+      return "Senior";
+    }
+    if (lower.includes("mid")) {
+      return "Mid";
+    }
+    if (lower.includes("entry") || lower.includes("intern") || lower.includes("associate")) {
+      return "Entry";
+    }
+    return "Mid";
+  }
+
+  private async crawlWordPress(company: CompanyConfig): Promise<Job[]> {
+    const response = await fetch(
+      `https://${company.token}/wp-json/wp/v2/awsm_job_openings?per_page=100`,
+    );
+
+    if (!response.ok) {
+      throw new Error(`WordPress API responded with status ${response.status} for ${company.name}`);
+    }
+
+    const data = (await response.json()) as WordPressJob[];
+
+    const filtered = data.filter((job) => this.isWithinHours(job.modified_gmt, 24));
+
+    return filtered.map((job) => {
+      const rawContent = this.stripHtml(job.content.rendered);
+      const title = this.stripHtml(job.title.rendered);
+
+      const enriched = this.enrichJob({
+        dateFound: this.todayISO(),
+        title,
+        company: company.name,
+        location: this.extractWordPressLocation(rawContent),
+        url: job.link,
+        salary: "",
+        description: this.truncateDescription(job.content.rendered),
+        source: "WordPress",
+        rawDescription: rawContent,
+        employerType: null,
+      });
+      enriched.companySize = company.size || "";
+      return enriched;
+    });
+  }
+
+  private extractWordPressLocation(content: string): string {
+    const lower = content.toLowerCase();
+    if (lower.includes("remote")) {
+      return "Remote";
+    }
+    return "";
+  }
+
   async crawl(): Promise<CrawlResult> {
     const jobs: Job[] = [];
     const errors: string[] = [];
@@ -163,6 +304,12 @@ export class CompanyDirectCrawler extends BaseCrawler {
             break;
           case "ashby":
             companyJobs = await this.crawlAshby(company);
+            break;
+          case "workable":
+            companyJobs = await this.crawlWorkable(company);
+            break;
+          case "wordpress":
+            companyJobs = await this.crawlWordPress(company);
             break;
         }
 
