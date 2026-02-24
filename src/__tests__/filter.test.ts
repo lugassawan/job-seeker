@@ -28,46 +28,14 @@ function makeJob(overrides: Partial<Job> = {}): Job {
 describe("isRelevantJob", () => {
   test.each([
     "Software Engineer",
-    "Senior Developer",
-    "Frontend Engineer",
-    "Front-End Developer",
+    "Senior Software Engineer",
+    "Software Developer",
     "Backend Engineer",
+    "Senior Backend Developer",
     "Back-End Developer",
     "Fullstack Developer",
     "Full-Stack Engineer",
-    "DevOps Engineer",
-    "SRE",
-    "Site Reliability Engineer",
-    "Platform Engineer",
-    "Infrastructure Engineer",
-    "Cloud Engineer",
-    "Data Engineer",
-    "Machine Learning Engineer",
-    "ML Engineer",
-    "AI Engineer",
-    "Mobile Developer",
-    "iOS Developer",
-    "Android Engineer",
-    "React Developer",
-    "Node.js Developer",
-    "Python Engineer",
-    "Java Developer",
-    "Golang Developer",
-    "Go Developer",
-    "Rust Engineer",
-    "TypeScript Developer",
-    "JavaScript Developer",
-    "Ruby Engineer",
-    "Scala Developer",
-    "Kotlin Developer",
-    "Swift Developer",
-    "Flutter Developer",
-    "Web Developer",
-    "Systems Engineer",
-    "Security Engineer",
-    "QA Engineer",
-    "Test Engineer",
-    "Automation Engineer",
+    "Senior Full Stack Developer",
   ])("matches engineering title: %s", (title) => {
     expect(isRelevantJob(makeJob({ title }))).toBe(true);
   });
@@ -75,7 +43,7 @@ describe("isRelevantJob", () => {
   test("matches when keyword appears in requiredSkills", () => {
     const job = makeJob({
       title: "Associate I",
-      requiredSkills: "React, TypeScript, Node.js",
+      requiredSkills: "Software Engineer, TypeScript, Node.js",
     });
     expect(isRelevantJob(job)).toBe(true);
   });
@@ -95,7 +63,16 @@ describe("isRelevantJob", () => {
     "Recruiter",
     "Office Administrator",
     "Accountant",
-  ])("rejects non-engineering title: %s", (title) => {
+    "Frontend Engineer",
+    "DevOps Engineer",
+    "ML Engineer",
+    "Mobile Developer",
+    "Data Engineer",
+    "Security Engineer",
+    "QA Engineer",
+    "iOS Developer",
+    "Android Engineer",
+  ])("rejects non-matching title: %s", (title) => {
     expect(isRelevantJob(makeJob({ title, requiredSkills: "" }))).toBe(false);
   });
 });
@@ -104,20 +81,12 @@ describe("isRelevantJob", () => {
 
 describe("isExcludedLocation", () => {
   test.each([
-    "Indonesia",
-    "Jakarta, Indonesia",
     "india",
     "India",
     "Remote - India",
     "Bangalore, India",
-    "INDONESIA",
   ])("excludes location: %s", (location) => {
     expect(isExcludedLocation(location)).toBe(true);
-  });
-
-  test("excludes standalone country code ID", () => {
-    expect(isExcludedLocation("ID")).toBe(true);
-    expect(isExcludedLocation("Remote - ID")).toBe(true);
   });
 
   test("excludes standalone country code IN", () => {
@@ -134,11 +103,14 @@ describe("isExcludedLocation", () => {
     "London, UK",
     "Berlin, Germany",
     "New York, US",
+    "Jakarta, Indonesia",
+    "Indonesia",
+    "Remote - ID",
   ])("allows location: %s", (location) => {
     expect(isExcludedLocation(location)).toBe(false);
   });
 
-  test("does not false-positive on substrings containing ID or IN", () => {
+  test("does not false-positive on substrings containing IN", () => {
     expect(isExcludedLocation("Florida")).toBe(false);
     expect(isExcludedLocation("Madrid")).toBe(false);
   });
@@ -203,7 +175,7 @@ describe("filterJobs", () => {
   });
 
   test("removes a job in an excluded location", () => {
-    const jobs = [makeJob({ location: "Jakarta, Indonesia" })];
+    const jobs = [makeJob({ location: "Bangalore, India" })];
     expect(filterJobs(jobs)).toHaveLength(0);
   });
 
@@ -217,7 +189,7 @@ describe("filterJobs", () => {
     const jobs = [
       makeJob({ title: "Software Engineer", location: "Remote" }), // pass
       makeJob({ title: "Sales Rep", requiredSkills: "" }), // fail: irrelevant
-      makeJob({ location: "India" }), // fail: excluded location
+      makeJob({ location: "Bangalore, India" }), // fail: excluded location
       makeJob({
         dateFound: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
       }), // fail: too old

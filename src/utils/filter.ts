@@ -3,56 +3,21 @@ import type { Job } from "../types.ts";
 // ─── Keywords & Patterns ────────────────────────────────────────────
 
 const RELEVANT_KEYWORDS: string[] = [
-  "software",
-  "engineer",
-  "developer",
-  "frontend",
-  "front-end",
+  "software engineer",
+  "software developer",
   "backend",
   "back-end",
   "fullstack",
   "full-stack",
-  "devops",
-  "sre",
-  "site reliability",
-  "platform",
-  "infrastructure",
-  "cloud",
-  "data engineer",
-  "machine learning",
-  "ml engineer",
-  "ai engineer",
-  "mobile",
-  "ios",
-  "android",
-  "react",
-  "node",
-  "python",
-  "java",
-  "golang",
-  "go ",
-  "rust",
-  "typescript",
-  "javascript",
-  "ruby",
-  "scala",
-  "kotlin",
-  "swift",
-  "flutter",
-  "web developer",
-  "systems engineer",
-  "security engineer",
-  "qa engineer",
-  "test engineer",
-  "automation engineer",
+  "full stack",
 ];
 
 /**
- * Matches "Indonesia", "India", and their standalone ISO-alpha-2 codes.
- * The word-boundary anchors (\b) ensure "ID" and "IN" only match as
- * standalone tokens — so "United" or "Florida" won't false-positive.
+ * Matches "India" and its standalone ISO-alpha-2 code "IN".
+ * The word-boundary anchors (\b) ensure "IN" only matches as a
+ * standalone token — so "United" or "Florida" won't false-positive.
  */
-const EXCLUDED_LOCATION_PATTERNS: RegExp[] = [/\bindonesia\b/i, /\bindia\b/i, /\bID\b/, /\bIN\b/];
+const EXCLUDED_LOCATION_PATTERNS: RegExp[] = [/\bindia\b/i, /\bIN\b/];
 
 // ─── Filter Functions ───────────────────────────────────────────────
 
