@@ -28,7 +28,10 @@ export type JobSource =
   | "WordPress"
   | "WeWorkRemotely"
   | "TechInAsia"
-  | "Kalibrr";
+  | "Kalibrr"
+  | "SmartRecruiters"
+  | "Blibli"
+  | "BankNeo";
 
 export interface CrawlResult {
   source: JobSource;
@@ -222,9 +225,60 @@ export interface WordPressJob {
   content: { rendered: string };
 }
 
+// ─── SmartRecruiters API Types ──────────────────────────────────────
+
+export interface SmartRecruitersResponse {
+  offset: number;
+  limit: number;
+  totalFound: number;
+  content: SmartRecruitersJob[];
+}
+
+export interface SmartRecruitersJob {
+  id: string;
+  name: string;
+  releasedDate: string;
+  location: {
+    city: string;
+    country: string;
+    remote: boolean;
+    hybrid: boolean;
+  };
+  function: { id: string; label: string };
+  experienceLevel: { id: string; label: string };
+  ref: string;
+}
+
+export interface SmartRecruitersJobDetail {
+  id: string;
+  name: string;
+  postingUrl: string;
+  applyUrl: string;
+  compensation?: {
+    min: number;
+    max: number;
+    currency: string;
+    period: string;
+  };
+  jobAd: {
+    sections: {
+      companyDescription?: { text: string };
+      jobDescription?: { text: string };
+      qualifications?: { text: string };
+      additionalInformation?: { text: string };
+    };
+  };
+}
+
 // ─── Company Config Types ────────────────────────────────────────────
 
-export type CompanyPlatform = "greenhouse" | "lever" | "ashby" | "workable" | "wordpress";
+export type CompanyPlatform =
+  | "greenhouse"
+  | "lever"
+  | "ashby"
+  | "workable"
+  | "wordpress"
+  | "smartrecruiters";
 
 export interface CompanyConfig {
   name: string;

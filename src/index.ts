@@ -1,4 +1,6 @@
+import { BankNeoCrawler } from "./crawlers/bankneo.ts";
 import type { BaseCrawler } from "./crawlers/base.ts";
+import { BlibliCrawler } from "./crawlers/blibli.ts";
 import { CompanyDirectCrawler } from "./crawlers/company-direct.ts";
 import { JapanDevCrawler } from "./crawlers/japandev.ts";
 import { JSearchCrawler } from "./crawlers/jsearch.ts";
@@ -34,6 +36,8 @@ try {
     new WeWorkRemotelyCrawler(),
     new TechInAsiaCrawler(),
     new KalibrrCrawler(),
+    new BlibliCrawler(),
+    new BankNeoCrawler(),
   ];
 
   // JSearch requires API key — only add if configured

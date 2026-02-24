@@ -7,6 +7,9 @@ import type {
   Job,
   JobSource,
   LeverJob,
+  SmartRecruitersJob,
+  SmartRecruitersJobDetail,
+  SmartRecruitersResponse,
   WordPressJob,
   WorkableJob,
   WorkableJobDetail,
@@ -275,6 +278,114 @@ export class CompanyDirectCrawler extends BaseCrawler {
     });
   }
 
+  private async crawlSmartRecruiters(company: CompanyConfig): Promise<Job[]> {
+    const response = await fetch(
+      `https://api.smartrecruiters.com/v1/companies/${company.token}/postings?limit=100`,
+      { headers: { "User-Agent": this.userAgent } },
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `SmartRecruiters API responded with status ${response.status} for ${company.name}`,
+      );
+    }
+
+    const data = (await response.json()) as SmartRecruitersResponse;
+
+    const filtered = data.content.filter((job) => {
+      const isEngineering = this.isEngineeringDepartment(job.function?.label || "");
+      const isRecent = this.isWithinHours(job.releasedDate, 24);
+      return isEngineering && isRecent;
+    });
+
+    const jobs: Job[] = [];
+    for (const job of filtered) {
+      const detail = await this.fetchSmartRecruitersDetail(company.token, job.id);
+      const rawDescription = this.buildSmartRecruitersDescription(detail);
+      const location = this.buildSmartRecruitersLocation(job);
+
+      const enriched = this.enrichJob({
+        dateFound: this.todayISO(),
+        title: job.name,
+        company: company.name,
+        location,
+        url: detail.postingUrl || `https://jobs.smartrecruiters.com/${company.token}/${job.id}`,
+        salary: this.formatSmartRecruitersCompensation(detail),
+        description: this.truncateDescription(rawDescription),
+        source: "SmartRecruiters",
+        rawDescription,
+        employerType: null,
+      });
+
+      if (job.experienceLevel?.label) {
+        enriched.experienceLevel = this.mapSmartRecruitersExperience(job.experienceLevel.label);
+      }
+      enriched.companySize = company.size || "";
+      jobs.push(enriched);
+    }
+
+    return jobs;
+  }
+
+  private async fetchSmartRecruitersDetail(
+    token: string,
+    jobId: string,
+  ): Promise<SmartRecruitersJobDetail> {
+    const response = await fetch(
+      `https://api.smartrecruiters.com/v1/companies/${token}/postings/${jobId}`,
+      { headers: { "User-Agent": this.userAgent } },
+    );
+
+    if (!response.ok) {
+      throw new Error(`SmartRecruiters detail API responded with status ${response.status}`);
+    }
+
+    return (await response.json()) as SmartRecruitersJobDetail;
+  }
+
+  private buildSmartRecruitersDescription(detail: SmartRecruitersJobDetail): string {
+    const sections = detail.jobAd?.sections;
+    if (!sections) return "";
+    const parts = [
+      sections.jobDescription?.text,
+      sections.qualifications?.text,
+      sections.additionalInformation?.text,
+    ].filter(Boolean);
+    return this.stripHtml(parts.join(" "));
+  }
+
+  private buildSmartRecruitersLocation(job: SmartRecruitersJob): string {
+    const parts: string[] = [];
+    if (job.location?.city) parts.push(job.location.city);
+    if (job.location?.country) parts.push(job.location.country);
+    const locationStr = parts.join(", ");
+
+    if (job.location?.remote) {
+      return locationStr ? `Remote - ${locationStr}` : "Remote";
+    }
+    if (job.location?.hybrid) {
+      return locationStr ? `Hybrid - ${locationStr}` : "Hybrid";
+    }
+    return locationStr || "Remote";
+  }
+
+  private formatSmartRecruitersCompensation(detail: SmartRecruitersJobDetail): string {
+    const comp = detail.compensation;
+    if (!comp) return "";
+    const period = comp.period?.toLowerCase().replace("ly", "") || "";
+    return this.formatSalary(comp.min, comp.max, comp.currency, period);
+  }
+
+  private mapSmartRecruitersExperience(level: string): string {
+    const lower = level.toLowerCase();
+    if (lower.includes("director") || lower.includes("executive")) return "Lead";
+    if (lower.includes("senior") || lower.includes("mid-senior")) return "Senior";
+    if (lower.includes("mid")) return "Mid";
+    if (lower.includes("entry") || lower.includes("intern") || lower.includes("associate"))
+      return "Entry";
+    return "Mid";
+  }
+
   private extractWordPressLocation(content: string): string {
     const lower = content.toLowerCase();
     if (lower.includes("remote")) {
@@ -306,6 +417,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
             break;
           case "wordpress":
             companyJobs = await this.crawlWordPress(company);
+            break;
+          case "smartrecruiters":
+            companyJobs = await this.crawlSmartRecruiters(company);
             break;
         }
 

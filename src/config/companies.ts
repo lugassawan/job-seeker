@@ -1,7 +1,7 @@
 import type { CompanyConfig } from "../types.ts";
 
 // Company watchlist for direct career page crawling
-// platform: "greenhouse" | "lever" | "ashby" | "workable" | "wordpress"
+// platform: "greenhouse" | "lever" | "ashby" | "workable" | "wordpress" | "smartrecruiters"
 // token: the company's board token/slug used in their API URL
 export const COMPANY_WATCHLIST: CompanyConfig[] = [
   // Greenhouse companies
@@ -43,6 +43,10 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Kredivo", platform: "workable", token: "finaccel", size: "Mid-size" },
   { name: "Mitrais", platform: "workable", token: "mitrais", size: "Mid-size" },
   { name: "TabSquare", platform: "workable", token: "tabsquare", size: "Mid-size" },
+
+  // SmartRecruiters companies
+  { name: "Grab", platform: "smartrecruiters", token: "Grab", size: "Enterprise" },
+  { name: "Wise", platform: "smartrecruiters", token: "Wise", size: "Enterprise" },
 
   // WordPress (WP Job Openings) companies
   { name: "Bookipi", platform: "wordpress", token: "bookipi.com", size: "Startup" },
