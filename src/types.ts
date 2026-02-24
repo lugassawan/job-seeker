@@ -25,7 +25,10 @@ export type JobSource =
   | "Ashby"
   | "JapanDev"
   | "Workable"
-  | "WordPress";
+  | "WordPress"
+  | "WeWorkRemotely"
+  | "TechInAsia"
+  | "Kalibrr";
 
 export interface CrawlResult {
   source: JobSource;

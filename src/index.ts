@@ -2,8 +2,11 @@ import type { BaseCrawler } from "./crawlers/base.ts";
 import { CompanyDirectCrawler } from "./crawlers/company-direct.ts";
 import { JapanDevCrawler } from "./crawlers/japandev.ts";
 import { JSearchCrawler } from "./crawlers/jsearch.ts";
+import { KalibrrCrawler } from "./crawlers/kalibrr.ts";
 import { RemoteOKCrawler } from "./crawlers/remoteok.ts";
 import { RemotiveCrawler } from "./crawlers/remotive.ts";
+import { TechInAsiaCrawler } from "./crawlers/techinasia.ts";
+import { WeWorkRemotelyCrawler } from "./crawlers/weworkremotely.ts";
 import { GoogleSheetsService } from "./services/google-sheets.ts";
 import type { CrawlResult } from "./types.ts";
 import { computeHashesFromRows, deduplicateJobs } from "./utils/dedup.ts";
@@ -28,6 +31,9 @@ try {
     new RemotiveCrawler(),
     new CompanyDirectCrawler(),
     new JapanDevCrawler(),
+    new WeWorkRemotelyCrawler(),
+    new TechInAsiaCrawler(),
+    new KalibrrCrawler(),
   ];
 
   // JSearch requires API key — only add if configured
