@@ -323,6 +323,49 @@ export interface CompanyConfig {
   maxJobAgeHours?: number;
 }
 
+// ─── Discovered Company Types ────────────────────────────────────────
+
+export interface DiscoveredCompany {
+  name: string;
+  sources: string;
+  roleCount: number;
+  locations: string;
+  size: string;
+  remoteFriendly: string;
+  atsPlatform: string;
+  atsToken: string;
+  sampleUrl: string;
+  discoveredDate: string;
+}
+
+export const COMPANY_SHEET_HEADERS = [
+  "Name",
+  "Sources",
+  "Role Count",
+  "Locations",
+  "Size",
+  "Remote Friendly",
+  "ATS Platform",
+  "ATS Token",
+  "Sample URL",
+  "Discovered Date",
+] as const;
+
+export function discoveredCompanyToRow(company: DiscoveredCompany): string[] {
+  return [
+    company.name,
+    company.sources,
+    String(company.roleCount),
+    company.locations,
+    company.size,
+    company.remoteFriendly,
+    company.atsPlatform,
+    company.atsToken,
+    company.sampleUrl,
+    company.discoveredDate,
+  ];
+}
+
 // ─── Sheet Column Order ──────────────────────────────────────────────
 
 export const SHEET_HEADERS = [

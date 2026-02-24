@@ -12,7 +12,7 @@ export class GoogleSheetsService {
     this.sheetName = sheetName;
   }
 
-  static fromEnv(): GoogleSheetsService {
+  static fromEnv(sheetNameOverride?: string): GoogleSheetsService {
     const keyBase64 = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
     if (!keyBase64) {
       throw new Error("GOOGLE_SERVICE_ACCOUNT_KEY env var is not set");
@@ -23,7 +23,7 @@ export class GoogleSheetsService {
       throw new Error("GOOGLE_SHEET_ID env var is not set");
     }
 
-    const sheetName = process.env.GOOGLE_SHEET_NAME || "Jobs";
+    const sheetName = sheetNameOverride ?? process.env.GOOGLE_SHEET_NAME ?? "Jobs";
 
     const keyJson = JSON.parse(Buffer.from(keyBase64, "base64").toString("utf-8"));
 
@@ -141,6 +141,59 @@ export class GoogleSheetsService {
     });
 
     return (res.data.values as string[][] | undefined) ?? [];
+  }
+
+  async ensureSheet(): Promise<void> {
+    const res = await this.sheets.spreadsheets.get({
+      spreadsheetId: this.spreadsheetId,
+      fields: "sheets.properties",
+    });
+
+    const exists = res.data.sheets?.some((s) => s.properties?.title === this.sheetName);
+    if (exists) return;
+
+    await this.sheets.spreadsheets.batchUpdate({
+      spreadsheetId: this.spreadsheetId,
+      requestBody: {
+        requests: [{ addSheet: { properties: { title: this.sheetName } } }],
+      },
+    });
+    console.log(`Created sheet tab: ${this.sheetName}`);
+  }
+
+  async ensureCustomHeaders(headers: readonly string[]): Promise<void> {
+    const lastCol = String.fromCharCode(64 + headers.length); // A=65, so 64+N
+    const range = this.range(`A1:${lastCol}1`);
+
+    const res = await this.sheets.spreadsheets.values.get({
+      spreadsheetId: this.spreadsheetId,
+      range,
+    });
+
+    const firstRow = res.data.values?.at(0);
+    if (firstRow && firstRow.length > 0) return;
+
+    await this.sheets.spreadsheets.values.update({
+      spreadsheetId: this.spreadsheetId,
+      range,
+      valueInputOption: "RAW",
+      requestBody: { values: [headers as unknown as string[]] },
+    });
+    console.log(`Headers written to ${this.sheetName}`);
+  }
+
+  async appendRows(rows: string[][]): Promise<number> {
+    if (rows.length === 0) return 0;
+
+    await this.sheets.spreadsheets.values.append({
+      spreadsheetId: this.spreadsheetId,
+      range: this.range("A:A"),
+      valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: { values: rows },
+    });
+
+    return rows.length;
   }
 
   async appendJobs(jobs: Job[]): Promise<number> {

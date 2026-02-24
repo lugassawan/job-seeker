@@ -12,6 +12,7 @@
     "lint:fix": "biome lint --write .",
     "check": "biome check .",
     "check:fix": "biome check --write .",
+    "discover": "bun run src/discover.ts",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
