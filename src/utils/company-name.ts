@@ -1,5 +1,5 @@
 const LEGAL_SUFFIXES =
-  /\b(inc\.?|ltd\.?|llc\.?|gmbh|corp\.?|pte\.?|pvt\.?|pty\.?|co\.?|limited|incorporated|corporation)\b/gi;
+  /\b(inc\.?|ltd\.?|llc\.?|gmbh|corp\.?|pte\.?|pvt\.?|pty\.?|pt\.?|tbk\.?|co\.?|limited|incorporated|corporation)\b/gi;
 
 export function normalizeCompanyName(name: string): string {
   return name
@@ -22,11 +22,11 @@ export function generateAtsSlugs(name: string): string[] {
   // concatenated: "employmenthero"
   slugs.add(words.join(""));
 
-  // first word only: "employment"
+  // first word only: "employment" (skip short slugs to avoid false positives)
   const firstWord = words.at(0);
-  if (firstWord && words.length > 1) {
+  if (firstWord && words.length > 1 && firstWord.length >= 3) {
     slugs.add(firstWord);
   }
 
-  return [...slugs];
+  return [...slugs].filter((s) => s.length >= 3);
 }

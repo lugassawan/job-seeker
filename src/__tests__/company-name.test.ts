@@ -17,6 +17,8 @@ describe("normalizeCompanyName", () => {
     ["Acme Limited", "acme"],
     ["Acme Incorporated", "acme"],
     ["Acme Corporation", "acme"],
+    ["PT Allo Bank Indonesia Tbk", "allo bank indonesia"],
+    ["PT. Bank BCA Syariah", "bank bca syariah"],
   ])("normalizes %s → %s", (input, expected) => {
     expect(normalizeCompanyName(input)).toBe(expected);
   });
@@ -59,5 +61,19 @@ describe("generateAtsSlugs", () => {
     expect(slugs).toContain("modern-health");
     expect(slugs).toContain("modernhealth");
     expect(slugs).toContain("modern");
+  });
+
+  test("strips PT/Tbk and generates meaningful slugs for Indonesian companies", () => {
+    const slugs = generateAtsSlugs("PT Allo Bank Indonesia Tbk");
+    expect(slugs).toContain("allo-bank-indonesia");
+    expect(slugs).toContain("allobankindonesia");
+    expect(slugs).toContain("allo");
+    // Should NOT contain "pt" as a slug
+    expect(slugs).not.toContain("pt");
+  });
+
+  test("filters out slugs shorter than 3 characters", () => {
+    const slugs = generateAtsSlugs("EY");
+    expect(slugs).toEqual([]);
   });
 });
