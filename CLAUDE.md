@@ -25,7 +25,7 @@ Job crawler that runs on a schedule (GitHub Actions, every 6h). Crawls Software/
 **Sources:**
 - `RemoteOK` — remote jobs API (inherently remote-only)
 - `Remotive` — remote software-dev jobs API (inherently remote-only)
-- `CompanyDirectCrawler` — crawls Greenhouse, Lever, Ashby, Workable, WordPress, and SmartRecruiters career pages for companies in `src/config/companies.ts`
+- `CompanyDirectCrawler` — crawls Greenhouse, Lever, Ashby, Workable, WordPress, SmartRecruiters, and Teamtailor career pages for companies in `src/config/companies.ts`
 - `JapanDev` — Algolia-backed search for engineering jobs on japan-dev.com
 - `WeWorkRemotely` — RSS feed parser for programming jobs
 - `TechInAsia` — REST API (`/api/2.0/job-postings`) for Indonesia engineering jobs (requires browser-like User-Agent + Referer)
@@ -34,7 +34,7 @@ Job crawler that runs on a schedule (GitHub Actions, every 6h). Crawls Software/
 - `BankNeo` — Bank Neo Commerce careers API (`www-cms.bankneo.co.id/api/job-vacancy`)
 - `JSearch` — OpenWeb Ninja job search API (optional, requires `OPENWEBNINJA_API_KEY`)
 
-**Filtering:** `src/utils/filter.ts` keeps only jobs matching Software/Backend/Fullstack keywords, excludes India, and requires posting within last 24h.
+**Filtering:** `src/utils/filter.ts` keeps only jobs matching Software/Backend/Fullstack keywords, excludes QA/Quality Assurance titles, excludes India, and requires posting within last 24h.
 
 **`skipDateFilter`:** `CompanyConfig` supports `skipDateFilter?: boolean` to bypass the 24h posting-date check for companies with unreliable or missing dates. Blibli and BankNeo always skip the date filter. For CompanyDirectCrawler companies, set it per-company in `src/config/companies.ts`.
 
