@@ -1,7 +1,7 @@
 import type { CompanyConfig } from "../types.ts";
 
 // Company watchlist for direct career page crawling
-// platform: "greenhouse" | "lever" | "ashby" | "workable" | "wordpress" | "smartrecruiters"
+// platform: "greenhouse" | "lever" | "ashby" | "workable" | "wordpress" | "smartrecruiters" | "teamtailor"
 // token: the company's board token/slug used in their API URL
 export const COMPANY_WATCHLIST: CompanyConfig[] = [
   // Greenhouse companies
@@ -20,7 +20,7 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
     platform: "greenhouse",
     token: "xendit",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   { name: "Agoda", platform: "greenhouse", token: "agoda", size: "Enterprise" },
   { name: "Twilio", platform: "greenhouse", token: "twilio", size: "Enterprise" },
@@ -31,7 +31,7 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Kraken", platform: "lever", token: "kraken", size: "Enterprise" },
   { name: "Medium", platform: "lever", token: "medium", size: "Mid-size" },
   { name: "Skillshare", platform: "lever", token: "skillshare", size: "Mid-size" },
-  { name: "Tiket", platform: "lever", token: "tiket", size: "Mid-size", skipDateFilter: true },
+  { name: "Tiket", platform: "lever", token: "tiket", size: "Mid-size", maxJobAgeHours: 0 },
 
   // Ashby companies
   { name: "Notion", platform: "ashby", token: "notion", size: "Mid-size" },
@@ -45,57 +45,57 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
     platform: "workable",
     token: "employment-hero",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
-  { name: "Ajaib", platform: "workable", token: "ajaib", size: "Mid-size", skipDateFilter: true },
+  { name: "Ajaib", platform: "workable", token: "ajaib", size: "Mid-size", maxJobAgeHours: 0 },
   {
     name: "Stockbit",
     platform: "teamtailor",
     token: "careers.stockbit.com",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   {
     name: "Traveloka",
     platform: "workable",
     token: "traveloka",
     size: "Enterprise",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   {
     name: "Dana",
     platform: "workable",
     token: "dana-indonesia",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   {
     name: "Halodoc",
     platform: "workable",
     token: "halodoc",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   {
     name: "Kredivo",
     platform: "workable",
     token: "finaccel",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   {
     name: "Mitrais",
     platform: "workable",
     token: "mitrais",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
   {
     name: "TabSquare",
     platform: "workable",
     token: "tabsquare",
     size: "Mid-size",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
 
   // SmartRecruiters companies
@@ -108,6 +108,6 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
     platform: "wordpress",
     token: "bookipi.com",
     size: "Startup",
-    skipDateFilter: true,
+    maxJobAgeHours: 0,
   },
 ];

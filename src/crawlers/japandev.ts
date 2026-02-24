@@ -9,6 +9,7 @@ const ALGOLIA_URL = `https://${ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/*/queri
 export class JapanDevCrawler extends BaseCrawler {
   source = "JapanDev" as const;
   name = "JapanDev";
+  protected override maxJobAgeHours = 168; // 7 days — smaller board, fewer daily postings
 
   async crawl(): Promise<CrawlResult> {
     const jobs: CrawlResult["jobs"] = [];
@@ -44,11 +45,13 @@ export class JapanDevCrawler extends BaseCrawler {
       const data = (await response.json()) as JapanDevResponse;
       const hits = data.results.at(0)?.hits ?? [];
 
-      const recentHits = hits.filter((hit) => this.isWithinHours(hit.published_at, 24));
+      const recentHits = hits.filter((hit) =>
+        this.isWithinHours(hit.published_at, this.maxJobAgeHours),
+      );
 
       for (const hit of recentHits) {
         const enriched = this.enrichJob({
-          dateFound: this.todayISO(),
+          dateFound: hit.published_at.split("T").at(0) ?? this.todayISO(),
           title: hit.title,
           company: hit.company_name,
           location: hit.location || "Remote",

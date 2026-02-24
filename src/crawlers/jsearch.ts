@@ -45,7 +45,7 @@ export class JSearchCrawler extends BaseCrawler {
         const json = (await response.json()) as JSearchResponse;
 
         const recentJobs = (json.data || []).filter((job) =>
-          this.isWithinHours(job.job_posted_at_datetime_utc, 24),
+          this.isWithinHours(job.job_posted_at_datetime_utc, this.maxJobAgeHours),
         );
 
         for (const job of recentJobs) {

@@ -39,7 +39,7 @@ Job crawler that runs on a schedule (GitHub Actions, every 6h). Crawls Software/
 
 **Filtering** (`src/utils/filter.ts`): three-stage pipeline — relevance (Software/Backend/Fullstack keywords, excludes QA/Quality Assurance titles) → location (excludes India) → recency (24h based on `dateFound`).
 
-**`skipDateFilter`:** `CompanyConfig` supports `skipDateFilter?: boolean` to bypass the 24h posting-date check for companies with unreliable or missing dates. Blibli and BankNeo always skip the date filter. For CompanyDirectCrawler companies, set it per-company in `src/config/companies.ts`.
+**`maxJobAgeHours`:** Configurable date window for job recency. `BaseCrawler` defaults to `24` (hours). Individual crawlers can override (e.g., JapanDev uses `168` = 7 days). `CompanyConfig` supports `maxJobAgeHours?: number` — `undefined` = use crawler default, `0` = skip date filter. Blibli and BankNeo always skip the date filter.
 
 **Deduplication** (`src/utils/dedup.ts`): MD5 hash of normalized `company|title|url` (lowercase, trailing slashes stripped) via `Bun.CryptoHasher`, compared against all existing Google Sheets rows.
 
@@ -57,7 +57,7 @@ Job crawler that runs on a schedule (GitHub Actions, every 6h). Crawls Software/
 4. Add source name to `JobSource` union in `src/types.ts`
 5. Instantiate in `src/index.ts`
 
-**Adding a company to CompanyDirectCrawler:** add an entry to `src/config/companies.ts` with `{ name, platform, token, size?, skipDateFilter? }`. Supported platforms: `greenhouse`, `lever`, `ashby`, `workable`, `wordpress`, `smartrecruiters`, `teamtailor`.
+**Adding a company to CompanyDirectCrawler:** add an entry to `src/config/companies.ts` with `{ name, platform, token, size?, maxJobAgeHours? }`. Supported platforms: `greenhouse`, `lever`, `ashby`, `workable`, `wordpress`, `smartrecruiters`, `teamtailor`.
 
 ## Conventions
 

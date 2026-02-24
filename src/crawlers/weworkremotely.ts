@@ -24,7 +24,7 @@ export class WeWorkRemotelyCrawler extends BaseCrawler {
       const items = this.parseItems(xml);
 
       for (const item of items) {
-        if (!this.isWithinHours(item.pubDate, 24)) {
+        if (!this.isWithinHours(item.pubDate, this.maxJobAgeHours)) {
           continue;
         }
 

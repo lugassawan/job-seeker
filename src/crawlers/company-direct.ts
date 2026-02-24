@@ -42,9 +42,10 @@ export class CompanyDirectCrawler extends BaseCrawler {
 
     const data = (await response.json()) as GreenhouseResponse;
 
+    const maxHours = company.maxJobAgeHours ?? this.maxJobAgeHours;
     const filtered = data.jobs.filter((job) => {
       const isEngineering = job.departments.some((dept) => this.isEngineeringDepartment(dept.name));
-      const isRecent = company.skipDateFilter || this.isWithinHours(job.updated_at, 24);
+      const isRecent = maxHours === 0 || this.isWithinHours(job.updated_at, maxHours);
       return isEngineering && isRecent;
     });
 
@@ -75,11 +76,12 @@ export class CompanyDirectCrawler extends BaseCrawler {
 
     const data = (await response.json()) as LeverJob[];
 
+    const maxHours = company.maxJobAgeHours ?? this.maxJobAgeHours;
     const filtered = data.filter((job) => {
       const isEngineering =
         this.isEngineeringDepartment(job.categories.department || "") ||
         this.isEngineeringDepartment(job.categories.team || "");
-      const isRecent = company.skipDateFilter || this.isWithinHours(String(job.createdAt), 24);
+      const isRecent = maxHours === 0 || this.isWithinHours(String(job.createdAt), maxHours);
       return isEngineering && isRecent;
     });
 
@@ -112,9 +114,10 @@ export class CompanyDirectCrawler extends BaseCrawler {
 
     const data = (await response.json()) as AshbyResponse;
 
+    const maxHours = company.maxJobAgeHours ?? this.maxJobAgeHours;
     const filtered = data.jobs.filter((job) => {
       const isEngineering = this.isEngineeringDepartment(job.departmentName || "");
-      const isRecent = company.skipDateFilter || this.isWithinHours(job.publishedAt, 24);
+      const isRecent = maxHours === 0 || this.isWithinHours(job.publishedAt, maxHours);
       return isEngineering && isRecent;
     });
 
@@ -157,9 +160,10 @@ export class CompanyDirectCrawler extends BaseCrawler {
       }
     }
 
+    const maxHours = company.maxJobAgeHours ?? this.maxJobAgeHours;
     const filtered = unique.filter((job) => {
       const isEngineering = this.isEngineeringDepartment(job.department || "");
-      const isRecent = company.skipDateFilter || this.isWithinHours(job.published_on, 24);
+      const isRecent = maxHours === 0 || this.isWithinHours(job.published_on, maxHours);
       return isEngineering && isRecent;
     });
 
@@ -241,9 +245,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
 
     const data = (await response.json()) as WordPressJob[];
 
-    const filtered = company.skipDateFilter
-      ? data
-      : data.filter((job) => this.isWithinHours(job.modified_gmt, 24));
+    const maxHours = company.maxJobAgeHours ?? this.maxJobAgeHours;
+    const filtered =
+      maxHours === 0 ? data : data.filter((job) => this.isWithinHours(job.modified_gmt, maxHours));
 
     return filtered.map((job) => {
       const rawContent = this.stripHtml(job.content.rendered);
@@ -280,9 +284,10 @@ export class CompanyDirectCrawler extends BaseCrawler {
 
     const data = (await response.json()) as SmartRecruitersResponse;
 
+    const maxHours = company.maxJobAgeHours ?? this.maxJobAgeHours;
     const filtered = data.content.filter((job) => {
       const isEngineering = this.isEngineeringDepartment(job.function?.label || "");
-      const isRecent = company.skipDateFilter || this.isWithinHours(job.releasedDate, 24);
+      const isRecent = maxHours === 0 || this.isWithinHours(job.releasedDate, maxHours);
       return isEngineering && isRecent;
     });
 

@@ -70,7 +70,7 @@ export class KalibrrCrawler extends BaseCrawler {
         const data = (await response.json()) as KalibrrResponse;
 
         for (const item of data.jobs) {
-          if (!this.isWithinHours(item.activation_date, 24)) {
+          if (!this.isWithinHours(item.activation_date, this.maxJobAgeHours)) {
             continue;
           }
 

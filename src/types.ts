@@ -319,8 +319,8 @@ export interface CompanyConfig {
   platform: CompanyPlatform;
   token: string;
   size?: string;
-  /** Skip 24h posting-date filter — useful for APIs with unreliable or missing dates */
-  skipDateFilter?: boolean;
+  /** Max job age in hours. undefined = use crawler default (24h), 0 = skip date filter */
+  maxJobAgeHours?: number;
 }
 
 // ─── Sheet Column Order ──────────────────────────────────────────────

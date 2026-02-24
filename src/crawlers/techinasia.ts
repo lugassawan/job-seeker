@@ -70,7 +70,7 @@ export class TechInAsiaCrawler extends BaseCrawler {
       const data = (await response.json()) as TechInAsiaResponse;
 
       for (const item of data.data) {
-        if (!this.isWithinHours(item.published_at, 24)) {
+        if (!this.isWithinHours(item.published_at, this.maxJobAgeHours)) {
           continue;
         }
 

@@ -20,7 +20,9 @@ export class RemotiveCrawler extends BaseCrawler {
 
       const data = (await response.json()) as RemotiveResponse;
 
-      const recentJobs = data.jobs.filter((job) => this.isWithinHours(job.publication_date, 24));
+      const recentJobs = data.jobs.filter((job) =>
+        this.isWithinHours(job.publication_date, this.maxJobAgeHours),
+      );
 
       for (const job of recentJobs) {
         const enriched = this.enrichJob({
