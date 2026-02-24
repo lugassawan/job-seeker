@@ -25,7 +25,7 @@ export class RemoteOKCrawler extends BaseCrawler {
       // First element is a legal notice object — skip it
       const listings = data.slice(1) as RemoteOKJob[];
 
-      const recentListings = listings.filter((job) => this.isWithinHours(job.epoch, 24));
+      const recentListings = listings.filter((job) => this.isWithinHours(job.date, 24));
 
       for (const job of recentListings) {
         const enriched = this.enrichJob({

@@ -8,14 +8,14 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "GitLab", platform: "greenhouse", token: "gitlab", size: "Enterprise" },
   { name: "Cloudflare", platform: "greenhouse", token: "cloudflare", size: "Enterprise" },
   { name: "Figma", platform: "greenhouse", token: "figma", size: "Mid-size" },
-  { name: "Notion", platform: "greenhouse", token: "notion", size: "Mid-size" },
-  { name: "Ramp", platform: "greenhouse", token: "ramp", size: "Mid-size" },
-  { name: "Netflix", platform: "greenhouse", token: "netflix", size: "Enterprise" },
+  { name: "Stripe", platform: "greenhouse", token: "stripe", size: "Enterprise" },
+  { name: "Vercel", platform: "greenhouse", token: "vercel", size: "Startup" },
 
   // Lever companies
-  { name: "Stripe", platform: "lever", token: "stripe", size: "Enterprise" },
-  { name: "Vercel", platform: "lever", token: "vercel", size: "Startup" },
+  { name: "Netflix", platform: "lever", token: "netflix", size: "Enterprise" },
 
   // Ashby companies
+  { name: "Notion", platform: "ashby", token: "notion", size: "Mid-size" },
+  { name: "Ramp", platform: "ashby", token: "ramp", size: "Mid-size" },
   { name: "Linear", platform: "ashby", token: "linear", size: "Startup" },
 ];

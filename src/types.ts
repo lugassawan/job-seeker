@@ -58,7 +58,7 @@ export interface JSearchJob {
 
 export interface RemoteOKJob {
   id: string;
-  epoch: string;
+  epoch: number;
   date: string;
   company: string;
   position: string;
