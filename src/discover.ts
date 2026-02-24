@@ -114,7 +114,16 @@ try {
     console.log("\nNo new companies to add");
   }
 
-  // 9. Report errors
+  // 9. Apply sheet formatting (matching Jobs sheet style)
+  await sheets.applyFormatting(
+    COMPANY_SHEET_HEADERS.length,
+    new Map([
+      [3, 300], // Locations
+      [8, 350], // Sample URL
+    ]),
+  );
+
+  // 10. Report errors
   if (allErrors.length > 0) {
     console.log(`\nErrors (${allErrors.length}):`);
     for (const error of allErrors) {

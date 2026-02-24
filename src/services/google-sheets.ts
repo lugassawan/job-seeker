@@ -72,65 +72,70 @@ export class GoogleSheetsService {
     }
   }
 
-  async applyFormatting(): Promise<void> {
+  async applyFormatting(
+    columnCount: number = SHEET_HEADERS.length,
+    wideColumns?: Map<number, number>,
+  ): Promise<void> {
     const sheetId = await this.getSheetId();
-    const descriptionColumnIndex = SHEET_HEADERS.indexOf("Description");
+
+    const requests: sheets_v4.Schema$Request[] = [
+      {
+        repeatCell: {
+          range: { sheetId, startRowIndex: 1 },
+          cell: {
+            userEnteredFormat: {
+              textFormat: { bold: false, foregroundColor: { red: 0, green: 0, blue: 0 } },
+              backgroundColor: { red: 1, green: 1, blue: 1 },
+              verticalAlignment: "MIDDLE",
+              wrapStrategy: "WRAP",
+            },
+          },
+          fields: "userEnteredFormat(textFormat,backgroundColor,verticalAlignment,wrapStrategy)",
+        },
+      },
+      {
+        repeatCell: {
+          range: {
+            sheetId,
+            startRowIndex: 0,
+            endRowIndex: 1,
+            startColumnIndex: 0,
+            endColumnIndex: columnCount,
+          },
+          cell: {
+            userEnteredFormat: {
+              textFormat: { bold: true, foregroundColor: { red: 1, green: 1, blue: 1 } },
+              backgroundColor: { red: 0.2, green: 0.46, blue: 0.85 },
+              horizontalAlignment: "CENTER",
+              verticalAlignment: "MIDDLE",
+              wrapStrategy: "WRAP",
+            },
+          },
+          fields:
+            "userEnteredFormat(textFormat,backgroundColor,horizontalAlignment,verticalAlignment,wrapStrategy)",
+        },
+      },
+    ];
+
+    const columns = wideColumns ?? new Map([[SHEET_HEADERS.indexOf("Description"), 400]]);
+    for (const [colIndex, pixelSize] of columns) {
+      requests.push({
+        updateDimensionProperties: {
+          range: {
+            sheetId,
+            dimension: "COLUMNS",
+            startIndex: colIndex,
+            endIndex: colIndex + 1,
+          },
+          properties: { pixelSize },
+          fields: "pixelSize",
+        },
+      });
+    }
 
     await this.sheets.spreadsheets.batchUpdate({
       spreadsheetId: this.spreadsheetId,
-      requestBody: {
-        requests: [
-          {
-            repeatCell: {
-              range: { sheetId, startRowIndex: 1 },
-              cell: {
-                userEnteredFormat: {
-                  textFormat: { bold: false, foregroundColor: { red: 0, green: 0, blue: 0 } },
-                  backgroundColor: { red: 1, green: 1, blue: 1 },
-                  verticalAlignment: "MIDDLE",
-                  wrapStrategy: "WRAP",
-                },
-              },
-              fields:
-                "userEnteredFormat(textFormat,backgroundColor,verticalAlignment,wrapStrategy)",
-            },
-          },
-          {
-            repeatCell: {
-              range: {
-                sheetId,
-                startRowIndex: 0,
-                endRowIndex: 1,
-                startColumnIndex: 0,
-                endColumnIndex: SHEET_HEADERS.length,
-              },
-              cell: {
-                userEnteredFormat: {
-                  textFormat: { bold: true, foregroundColor: { red: 1, green: 1, blue: 1 } },
-                  backgroundColor: { red: 0.2, green: 0.46, blue: 0.85 },
-                  horizontalAlignment: "CENTER",
-                  verticalAlignment: "MIDDLE",
-                  wrapStrategy: "WRAP",
-                },
-              },
-              fields:
-                "userEnteredFormat(textFormat,backgroundColor,horizontalAlignment,verticalAlignment,wrapStrategy)",
-            },
-          },
-          {
-            updateDimensionProperties: {
-              range: {
-                sheetId,
-                dimension: "COLUMNS",
-                startIndex: descriptionColumnIndex,
-                endIndex: descriptionColumnIndex + 1,
-              },
-              properties: { pixelSize: 400 },
-              fields: "pixelSize",
-            },
-          },
-        ],
-      },
+      requestBody: { requests },
     });
   }
 
