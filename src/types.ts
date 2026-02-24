@@ -16,7 +16,16 @@ export interface Job {
   notes: string;
 }
 
-export type JobSource = "JSearch" | "RemoteOK" | "Remotive" | "Greenhouse" | "Lever" | "Ashby";
+export type JobSource =
+  | "JSearch"
+  | "RemoteOK"
+  | "Remotive"
+  | "Greenhouse"
+  | "Lever"
+  | "Ashby"
+  | "JapanDev"
+  | "Workable"
+  | "WordPress";
 
 export interface CrawlResult {
   source: JobSource;
@@ -146,9 +155,73 @@ export interface AshbyJob {
   isRemote: boolean;
 }
 
+// ─── JapanDev (Algolia) API Types ───────────────────────────────────
+
+export interface JapanDevHit {
+  title: string;
+  slug: string;
+  company_name: string;
+  company: { slug: string };
+  location: string;
+  salary_min: number | null;
+  salary_max: number | null;
+  remote_level: string;
+  seniority_level: string;
+  published_at: string;
+  skill_names: string[];
+  application_url: string | null;
+}
+
+export interface JapanDevResponse {
+  results: { hits: JapanDevHit[] }[];
+}
+
+// ─── Workable API Types ─────────────────────────────────────────────
+
+export interface WorkableResponse {
+  name: string;
+  jobs: WorkableJob[];
+}
+
+export interface WorkableJob {
+  title: string;
+  shortcode: string;
+  department: string | null;
+  url: string;
+  telecommuting: boolean;
+  published_on: string;
+  country: string;
+  city: string;
+  experience: string;
+}
+
+export interface WorkableJobDetail {
+  title: string;
+  shortcode: string;
+  department: string[];
+  description: string;
+  requirements: string;
+  benefits: string;
+  location: { country: string; city: string };
+  remote: boolean;
+  published: string;
+}
+
+// ─── WordPress (WP Job Openings) API Types ──────────────────────────
+
+export interface WordPressJob {
+  id: number;
+  date_gmt: string;
+  modified_gmt: string;
+  slug: string;
+  link: string;
+  title: { rendered: string };
+  content: { rendered: string };
+}
+
 // ─── Company Config Types ────────────────────────────────────────────
 
-export type CompanyPlatform = "greenhouse" | "lever" | "ashby";
+export type CompanyPlatform = "greenhouse" | "lever" | "ashby" | "workable" | "wordpress";
 
 export interface CompanyConfig {
   name: string;
