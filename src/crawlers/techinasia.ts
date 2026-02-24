@@ -57,8 +57,9 @@ export class TechInAsiaCrawler extends BaseCrawler {
       const response = await fetch(`${API_URL}?${params.toString()}`, {
         headers: {
           Accept: "application/json",
-          "User-Agent": "job-seeker-bot/1.0",
+          "User-Agent": "Mozilla/5.0 (compatible; job-seeker-bot/1.0)",
           "X-Requested-With": "XMLHttpRequest",
+          Referer: "https://www.techinasia.com/jobs/search",
         },
       });
 
