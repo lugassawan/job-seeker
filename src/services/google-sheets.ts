@@ -41,6 +41,16 @@ export class GoogleSheetsService {
     return range ? `${this.sheetName}!${range}` : this.sheetName;
   }
 
+  private async getSheetId(): Promise<number> {
+    const res = await this.sheets.spreadsheets.get({
+      spreadsheetId: this.spreadsheetId,
+      fields: "sheets.properties",
+    });
+
+    const sheet = res.data.sheets?.find((s) => s.properties?.title === this.sheetName);
+    return sheet?.properties?.sheetId ?? 0;
+  }
+
   async ensureHeaders(): Promise<void> {
     const res = await this.sheets.spreadsheets.values.get({
       spreadsheetId: this.spreadsheetId,
@@ -60,6 +70,68 @@ export class GoogleSheetsService {
       });
       console.log("Headers written to sheet");
     }
+  }
+
+  async applyFormatting(): Promise<void> {
+    const sheetId = await this.getSheetId();
+    const descriptionColumnIndex = SHEET_HEADERS.indexOf("Description");
+
+    await this.sheets.spreadsheets.batchUpdate({
+      spreadsheetId: this.spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            repeatCell: {
+              range: { sheetId, startRowIndex: 1 },
+              cell: {
+                userEnteredFormat: {
+                  textFormat: { bold: false, foregroundColor: { red: 0, green: 0, blue: 0 } },
+                  backgroundColor: { red: 1, green: 1, blue: 1 },
+                  verticalAlignment: "MIDDLE",
+                  wrapStrategy: "WRAP",
+                },
+              },
+              fields:
+                "userEnteredFormat(textFormat,backgroundColor,verticalAlignment,wrapStrategy)",
+            },
+          },
+          {
+            repeatCell: {
+              range: {
+                sheetId,
+                startRowIndex: 0,
+                endRowIndex: 1,
+                startColumnIndex: 0,
+                endColumnIndex: SHEET_HEADERS.length,
+              },
+              cell: {
+                userEnteredFormat: {
+                  textFormat: { bold: true, foregroundColor: { red: 1, green: 1, blue: 1 } },
+                  backgroundColor: { red: 0.2, green: 0.46, blue: 0.85 },
+                  horizontalAlignment: "CENTER",
+                  verticalAlignment: "MIDDLE",
+                  wrapStrategy: "WRAP",
+                },
+              },
+              fields:
+                "userEnteredFormat(textFormat,backgroundColor,horizontalAlignment,verticalAlignment,wrapStrategy)",
+            },
+          },
+          {
+            updateDimensionProperties: {
+              range: {
+                sheetId,
+                dimension: "COLUMNS",
+                startIndex: descriptionColumnIndex,
+                endIndex: descriptionColumnIndex + 1,
+              },
+              properties: { pixelSize: 400 },
+              fields: "pixelSize",
+            },
+          },
+        ],
+      },
+    });
   }
 
   async getExistingRows(): Promise<string[][]> {
