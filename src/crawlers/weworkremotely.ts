@@ -13,7 +13,7 @@ export class WeWorkRemotelyCrawler extends BaseCrawler {
 
     try {
       const response = await fetch(RSS_URL, {
-        headers: { "User-Agent": "job-seeker-bot/1.0" },
+        headers: { "User-Agent": this.userAgent },
       });
 
       if (!response.ok) {

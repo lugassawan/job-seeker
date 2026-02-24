@@ -5,6 +5,9 @@ export abstract class BaseCrawler {
   abstract source: JobSource;
   abstract name: string;
 
+  protected readonly userAgent =
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
   abstract crawl(): Promise<CrawlResult>;
 
   protected stripHtml(html: string): string {

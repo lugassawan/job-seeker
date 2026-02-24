@@ -12,7 +12,7 @@ export class RemoteOKCrawler extends BaseCrawler {
     try {
       const response = await fetch("https://remoteok.com/api", {
         headers: {
-          "User-Agent": "job-seeker-bot/1.0",
+          "User-Agent": this.userAgent,
         },
       });
 
