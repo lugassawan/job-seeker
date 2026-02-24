@@ -113,19 +113,4 @@ export class BlibliCrawler extends BaseCrawler {
     const { responseObject } = (await response.json()) as BlibliApiResponse<BlibliJobDetail>;
     return responseObject;
   }
-
-  private isEngineeringDepartment(department: string): boolean {
-    const keywords = [
-      "technology",
-      "engineering",
-      "software",
-      "development",
-      "platform",
-      "infrastructure",
-      "developer",
-      "technical",
-    ];
-    const lower = (department || "").toLowerCase();
-    return keywords.some((keyword) => lower.includes(keyword));
-  }
 }

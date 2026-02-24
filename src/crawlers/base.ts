@@ -164,6 +164,25 @@ export abstract class BaseCrawler {
     console.log(`[${this.name}] ${message}`);
   }
 
+  protected isEngineeringDepartment(department: string): boolean {
+    const keywords = [
+      "tech",
+      "engineering",
+      "software",
+      "development",
+      "product",
+      "platform",
+      "infrastructure",
+      "developer",
+      "data",
+      "it",
+    ];
+    const lower = (department || "").toLowerCase();
+    return keywords.some((keyword) =>
+      keyword === "it" ? /\bit\b/.test(lower) : lower.includes(keyword),
+    );
+  }
+
   protected isWithinHours(dateStr: string, hours = 24): boolean {
     const now = Date.now();
     let timestamp: number;

@@ -29,22 +29,6 @@ export class CompanyDirectCrawler extends BaseCrawler {
     this.companies = companies ?? COMPANY_WATCHLIST;
   }
 
-  private isEngineeringDepartment(department: string): boolean {
-    const keywords = [
-      "software",
-      "engineering",
-      "product",
-      "technology",
-      "development",
-      "platform",
-      "infrastructure",
-      "developer",
-      "technical",
-    ];
-    const lower = department.toLowerCase();
-    return keywords.some((keyword) => lower.includes(keyword));
-  }
-
   private async crawlGreenhouse(company: CompanyConfig): Promise<Job[]> {
     const response = await fetch(
       `https://boards-api.greenhouse.io/v1/boards/${company.token}/jobs?content=true`,
