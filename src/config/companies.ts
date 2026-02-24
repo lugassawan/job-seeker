@@ -11,14 +11,26 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Stripe", platform: "greenhouse", token: "stripe", size: "Enterprise" },
   { name: "Vercel", platform: "greenhouse", token: "vercel", size: "Startup" },
   { name: "Speechify", platform: "greenhouse", token: "speechify", size: "Mid-size" },
+  { name: "CircleCI", platform: "greenhouse", token: "circleci", size: "Mid-size" },
+  { name: "InfluxData", platform: "greenhouse", token: "influxdb", size: "Mid-size" },
+  { name: "Consensys", platform: "greenhouse", token: "consensys", size: "Mid-size" },
+  { name: "Modern Health", platform: "greenhouse", token: "modernhealth", size: "Mid-size" },
+  { name: "ReCharge", platform: "greenhouse", token: "recharge", size: "Mid-size" },
 
   // Lever companies
   { name: "Netflix", platform: "lever", token: "netflix", size: "Enterprise" },
+  { name: "Jobgether", platform: "lever", token: "jobgether" },
+  { name: "Kraken", platform: "lever", token: "kraken", size: "Enterprise" },
+  { name: "Medium", platform: "lever", token: "medium", size: "Mid-size" },
+  { name: "Skillshare", platform: "lever", token: "skillshare", size: "Mid-size" },
+  { name: "Alan", platform: "lever", token: "alan", size: "Mid-size" },
 
   // Ashby companies
   { name: "Notion", platform: "ashby", token: "notion", size: "Mid-size" },
   { name: "Ramp", platform: "ashby", token: "ramp", size: "Mid-size" },
   { name: "Linear", platform: "ashby", token: "linear", size: "Startup" },
+  { name: "Deel", platform: "ashby", token: "Deel", size: "Enterprise" },
+  { name: "Sketch", platform: "ashby", token: "sketch", size: "Mid-size" },
 
   // Workable companies
   { name: "Employment Hero", platform: "workable", token: "employment-hero", size: "Mid-size" },
