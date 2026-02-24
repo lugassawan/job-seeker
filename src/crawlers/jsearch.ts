@@ -23,7 +23,6 @@ export class JSearchCrawler extends BaseCrawler {
       try {
         const params = new URLSearchParams({
           query,
-          remote_jobs_only: "true",
           date_posted: "today",
           num_pages: "1",
         });

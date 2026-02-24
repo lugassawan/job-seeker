@@ -7,10 +7,10 @@ import type {
   Job,
   JobSource,
   LeverJob,
+  WordPressJob,
   WorkableJob,
   WorkableJobDetail,
   WorkableResponse,
-  WordPressJob,
 } from "../types.ts";
 import { BaseCrawler } from "./base.ts";
 
@@ -54,10 +54,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
     const data = (await response.json()) as GreenhouseResponse;
 
     const filtered = data.jobs.filter((job) => {
-      const isRemote = job.location.name.toLowerCase().includes("remote");
       const isEngineering = job.departments.some((dept) => this.isEngineeringDepartment(dept.name));
       const isRecent = this.isWithinHours(job.updated_at, 24);
-      return isRemote && isEngineering && isRecent;
+      return isEngineering && isRecent;
     });
 
     return filtered.map((job) => {
@@ -88,12 +87,11 @@ export class CompanyDirectCrawler extends BaseCrawler {
     const data = (await response.json()) as LeverJob[];
 
     const filtered = data.filter((job) => {
-      const isRemote = job.categories.location.toLowerCase().includes("remote");
       const isEngineering =
         this.isEngineeringDepartment(job.categories.department || "") ||
         this.isEngineeringDepartment(job.categories.team || "");
       const isRecent = this.isWithinHours(String(job.createdAt), 24);
-      return isRemote && isEngineering && isRecent;
+      return isEngineering && isRecent;
     });
 
     return filtered.map((job) => {
@@ -126,10 +124,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
     const data = (await response.json()) as AshbyResponse;
 
     const filtered = data.jobs.filter((job) => {
-      const isRemote = job.isRemote === true;
       const isEngineering = this.isEngineeringDepartment(job.departmentName || "");
       const isRecent = this.isWithinHours(job.publishedAt, 24);
-      return isRemote && isEngineering && isRecent;
+      return isEngineering && isRecent;
     });
 
     return filtered.map((job) => {
@@ -172,10 +169,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
     }
 
     const filtered = unique.filter((job) => {
-      const isRemote = job.telecommuting === true;
       const isEngineering = this.isEngineeringDepartment(job.department || "");
       const isRecent = this.isWithinHours(job.published_on, 24);
-      return isRemote && isEngineering && isRecent;
+      return isEngineering && isRecent;
     });
 
     // Fetch full descriptions from v2 detail endpoint

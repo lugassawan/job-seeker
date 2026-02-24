@@ -21,10 +21,7 @@ export class JapanDevCrawler extends BaseCrawler {
             indexName: ALGOLIA_INDEX,
             params: [
               "hitsPerPage=100",
-              `facetFilters=${JSON.stringify([
-                "remote_level:remote_level_full_worldwide",
-                "job_type_names:Engineering",
-              ])}`,
+              `facetFilters=${JSON.stringify(["job_type_names:Engineering"])}`,
             ].join("&"),
           },
         ],
