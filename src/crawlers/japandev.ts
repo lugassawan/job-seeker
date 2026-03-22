@@ -2,6 +2,7 @@ import type { CrawlResult, JapanDevHit, JapanDevResponse } from "../types.ts";
 import { BaseCrawler } from "./base.ts";
 
 const ALGOLIA_APP_ID = "8S3J8C7YSA";
+/** Public search-only API key, safe to expose (visible in japan-dev.com client-side JS) */
 const ALGOLIA_API_KEY = "9ebc037e3e423ff4aa80a065944a2b5b";
 const ALGOLIA_INDEX = "Job_production";
 const ALGOLIA_URL = `https://${ALGOLIA_APP_ID}-dsn.algolia.net/1/indexes/*/queries`;
