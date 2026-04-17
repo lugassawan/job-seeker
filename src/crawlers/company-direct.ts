@@ -1,6 +1,10 @@
 import { COMPANY_WATCHLIST } from "../config/companies.ts";
 import type {
   AshbyResponse,
+  BambooHRDetailResponse,
+  BambooHRJob,
+  BambooHRJobDetail,
+  BambooHRListResponse,
   CompanyConfig,
   CrawlResult,
   GreenhouseResponse,
@@ -462,6 +466,79 @@ export class CompanyDirectCrawler extends BaseCrawler {
     return json.data;
   }
 
+  private async crawlBambooHR(company: CompanyConfig): Promise<Job[]> {
+    const response = await fetch(`https://${company.token}.bamboohr.com/careers/list`, {
+      headers: { Accept: "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`BambooHR API responded with status ${response.status} for ${company.name}`);
+    }
+
+    const data = (await response.json()) as BambooHRListResponse;
+
+    // BambooHR list items carry no publish date, so the age filter is always skipped.
+    const filtered = data.result.filter((job) =>
+      this.isEngineeringDepartment(job.departmentLabel || ""),
+    );
+
+    const jobs: Job[] = [];
+    for (const job of filtered) {
+      let description = job.jobOpeningName;
+      let rawDescription = job.jobOpeningName;
+      let url = `https://${company.token}.bamboohr.com/careers/${job.id}`;
+
+      try {
+        const detail = await this.fetchBambooHRDetail(company.token, job.id);
+        rawDescription = this.stripHtml(detail.description);
+        description = this.truncateDescription(detail.description);
+        if (detail.jobOpeningShareUrl) url = detail.jobOpeningShareUrl;
+      } catch {
+        // Fall back to title-only if detail fetch fails
+      }
+
+      const enriched = this.enrichJob({
+        dateFound: this.todayISO(),
+        title: job.jobOpeningName,
+        company: company.name,
+        location: this.buildBambooHRLocation(job),
+        url,
+        salary: "",
+        description,
+        source: "BambooHR",
+        rawDescription,
+        employerType: null,
+      });
+      enriched.companySize = company.size || "";
+      jobs.push(enriched);
+    }
+
+    return jobs;
+  }
+
+  private async fetchBambooHRDetail(token: string, id: string): Promise<BambooHRJobDetail> {
+    const response = await fetch(`https://${token}.bamboohr.com/careers/${id}/detail`, {
+      headers: { Accept: "application/json" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`BambooHR detail API responded with status ${response.status}`);
+    }
+
+    const json = (await response.json()) as BambooHRDetailResponse;
+    return json.result.jobOpening;
+  }
+
+  private buildBambooHRLocation(job: BambooHRJob): string {
+    const ats = job.atsLocation;
+    if (ats?.country) {
+      return [ats.city, ats.state ?? ats.province, ats.country].filter(Boolean).join(", ");
+    }
+    const parts = [job.location?.city, job.location?.state].filter(Boolean);
+    if (parts.length > 0) return parts.join(", ");
+    return job.isRemote ? "Remote" : "";
+  }
+
   private extractWordPressLocation(content: string): string {
     const lower = content.toLowerCase();
     if (lower.includes("remote")) {
@@ -499,6 +576,9 @@ export class CompanyDirectCrawler extends BaseCrawler {
             break;
           case "teamtailor":
             companyJobs = await this.crawlTeamtailor(company);
+            break;
+          case "bamboohr":
+            companyJobs = await this.crawlBambooHR(company);
             break;
         }
 

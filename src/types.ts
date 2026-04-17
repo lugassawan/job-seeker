@@ -32,7 +32,8 @@ export type JobSource =
   | "SmartRecruiters"
   | "Teamtailor"
   | "Blibli"
-  | "BankNeo";
+  | "BankNeo"
+  | "BambooHR";
 
 export interface CrawlResult {
   source: JobSource;
@@ -303,6 +304,42 @@ export interface TeamtailorDetailResponse {
   data: TeamtailorJobDetail;
 }
 
+// ─── BambooHR API Types ─────────────────────────────────────────────
+
+export interface BambooHRJob {
+  id: string;
+  jobOpeningName: string;
+  departmentId: string;
+  departmentLabel: string;
+  employmentStatusLabel: string;
+  location: { city: string | null; state: string | null };
+  atsLocation: {
+    country: string | null;
+    state: string | null;
+    province: string | null;
+    city: string | null;
+  };
+  isRemote: boolean | null;
+  locationType: string;
+}
+
+export interface BambooHRListResponse {
+  meta: { totalCount: number };
+  result: BambooHRJob[];
+}
+
+export interface BambooHRJobDetail {
+  jobOpeningShareUrl: string;
+  jobOpeningName: string;
+  departmentLabel: string;
+  description: string;
+}
+
+export interface BambooHRDetailResponse {
+  meta: Record<string, unknown>;
+  result: { jobOpening: BambooHRJobDetail };
+}
+
 // ─── Company Config Types ────────────────────────────────────────────
 
 export type CompanyPlatform =
@@ -312,7 +349,8 @@ export type CompanyPlatform =
   | "workable"
   | "wordpress"
   | "smartrecruiters"
-  | "teamtailor";
+  | "teamtailor"
+  | "bamboohr";
 
 export interface CompanyConfig {
   name: string;

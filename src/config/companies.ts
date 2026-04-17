@@ -1,7 +1,7 @@
 import type { CompanyConfig } from "../types.ts";
 
 // Company watchlist for direct career page crawling
-// platform: "greenhouse" | "lever" | "ashby" | "workable" | "wordpress" | "smartrecruiters" | "teamtailor"
+// platform: "greenhouse" | "lever" | "ashby" | "workable" | "wordpress" | "smartrecruiters" | "teamtailor" | "bamboohr"
 // token: the company's board token/slug used in their API URL
 export const COMPANY_WATCHLIST: CompanyConfig[] = [
   // Greenhouse companies
@@ -24,6 +24,7 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   },
   { name: "Agoda", platform: "greenhouse", token: "agoda", size: "Enterprise" },
   { name: "Twilio", platform: "greenhouse", token: "twilio", size: "Enterprise" },
+  { name: "Remote", platform: "greenhouse", token: "remotecom", size: "Enterprise" },
 
   // Lever companies
   { name: "Netflix", platform: "lever", token: "netflix", size: "Enterprise" },
@@ -32,12 +33,15 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Medium", platform: "lever", token: "medium", size: "Mid-size" },
   { name: "Skillshare", platform: "lever", token: "skillshare", size: "Mid-size" },
   { name: "Tiket", platform: "lever", token: "tiket", size: "Mid-size", maxJobAgeHours: 0 },
+  { name: "Xsolla", platform: "lever", token: "xsolla", size: "Mid-size" },
 
   // Ashby companies
   { name: "Notion", platform: "ashby", token: "notion", size: "Mid-size" },
   { name: "Ramp", platform: "ashby", token: "ramp", size: "Mid-size" },
   { name: "Linear", platform: "ashby", token: "linear", size: "Startup" },
   { name: "Deel", platform: "ashby", token: "Deel", size: "Enterprise" },
+  { name: "Pave", platform: "ashby", token: "PaveBank", size: "Startup" },
+  { name: "Bespoke Labs", platform: "ashby", token: "bespokelabs", size: "Startup" },
 
   // Workable companies
   {
@@ -110,4 +114,7 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
     size: "Startup",
     maxJobAgeHours: 0,
   },
+
+  // BambooHR companies (list endpoint has no publish date, so the crawler always skips the age filter)
+  { name: "Shippit", platform: "bamboohr", token: "shippit", size: "Mid-size" },
 ];
