@@ -105,6 +105,8 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   // SmartRecruiters companies
   { name: "Grab", platform: "smartrecruiters", token: "Grab", size: "Enterprise" },
   { name: "Wise", platform: "smartrecruiters", token: "Wise", size: "Enterprise" },
+  { name: "Kata.ai", platform: "smartrecruiters", token: "Kataai", size: "Startup" },
+  { name: "Carousell", platform: "smartrecruiters", token: "CarousellGroup", size: "Mid-size" },
 
   // WordPress (WP Job Openings) companies
   {
