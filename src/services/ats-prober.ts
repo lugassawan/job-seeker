@@ -39,7 +39,7 @@ const PROBE_TARGETS: ProbeTarget[] = [
     buildUrl: (slug) => `https://apply.workable.com/api/v1/widget/accounts/${slug}`,
     validate: (data) => {
       const d = data as { jobs?: unknown[] };
-      return Array.isArray(d.jobs);
+      return Array.isArray(d.jobs) && d.jobs.length > 0;
     },
   },
   {
@@ -47,7 +47,7 @@ const PROBE_TARGETS: ProbeTarget[] = [
     buildUrl: (slug) => `https://api.smartrecruiters.com/v1/companies/${slug}/postings?limit=1`,
     validate: (data) => {
       const d = data as { content?: unknown[] };
-      return Array.isArray(d.content);
+      return Array.isArray(d.content) && d.content.length > 0;
     },
   },
 ];
@@ -60,25 +60,34 @@ function sleep(ms: number): Promise<void> {
 }
 
 async function tryProbe(url: string, validate: (data: unknown) => boolean): Promise<boolean> {
-  try {
-    const response = await fetch(url, {
-      signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
-    });
-    if (!response.ok) return false;
-    const data: unknown = await response.json();
-    return validate(data);
-  } catch {
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
+  });
+  if (!response.ok) {
+    await response.body?.cancel();
     return false;
   }
+  const data: unknown = await response.json();
+  return validate(data);
+  // Network/timeout errors propagate; caller decides how to handle them.
 }
 
-export async function probeAts(companyName: string): Promise<AtsMatch | null> {
+export async function probeAts(companyName: string, errors?: string[]): Promise<AtsMatch | null> {
   const slugs = generateAtsSlugs(companyName);
 
   for (const target of PROBE_TARGETS) {
     for (const slug of slugs) {
       const url = target.buildUrl(slug);
-      const matched = await tryProbe(url, target.validate);
+      let matched: boolean;
+      try {
+        matched = await tryProbe(url, target.validate);
+      } catch (err) {
+        errors?.push(
+          `${companyName} (${target.platform}/${slug}): ${err instanceof Error ? err.message : String(err)}`,
+        );
+        await sleep(PROBE_DELAY_MS);
+        continue;
+      }
 
       if (matched) {
         return { platform: target.platform, token: slug };

@@ -361,6 +361,12 @@ export interface CompanyConfig {
   maxJobAgeHours?: number;
 }
 
+export interface CompanySeed {
+  name: string;
+  industry: string; // e.g. "fintech", "saas", "devtools"
+  region: string; // e.g. "us", "eu", "sea"
+}
+
 // ─── Discovered Company Types ────────────────────────────────────────
 
 export interface DiscoveredCompany {
