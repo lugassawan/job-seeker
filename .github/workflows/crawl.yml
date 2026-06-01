@@ -22,7 +22,7 @@ jobs:
 
       - name: Run crawler
         run: |
-          set -o pipefail
+          set -euo pipefail
           bun run src/index.ts 2>&1 | tee /tmp/crawl-output.txt
         env:
           OPENWEBNINJA_API_KEY: ${{ secrets.OPENWEBNINJA_API_KEY }}
@@ -33,6 +33,7 @@ jobs:
       - name: Append run summary to weekly log
         if: always()
         run: |
+          set -euo pipefail
           WEEK=$(date -u +%G-W%V)
           mkdir -p crawl-logs
           {
@@ -44,10 +45,11 @@ jobs:
       - name: Commit weekly log
         if: always()
         run: |
+          set -euo pipefail
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git pull --rebase --autostash
           git add crawl-logs/
           git diff --cached --quiet && exit 0
-          git pull --rebase --autostash
           git commit -m "chore: crawl log $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
-          git push
+          for i in 1 2 3; do git push && break; git pull --rebase --autostash; done

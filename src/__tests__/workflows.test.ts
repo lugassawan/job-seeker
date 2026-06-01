@@ -2,7 +2,8 @@ import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const WORKFLOWS_DIR = join(import.meta.dir, "../../.github/workflows");
+// Anchored to repo root via process.cwd() — robust regardless of where this file lives.
+const WORKFLOWS_DIR = join(process.cwd(), ".github/workflows");
 
 function readWorkflowFiles(): Array<{ name: string; content: string }> {
   return readdirSync(WORKFLOWS_DIR)
@@ -18,6 +19,8 @@ describe("GitHub Actions workflows", () => {
     expect(violations.map((v) => v.name)).toEqual([]);
   });
 
+  // Smoke-check: crawl.yml must commit to crawl-logs/ with [skip ci] so GitHub does not
+  // auto-disable the scheduled workflow after 60 days of repo inactivity.
   test("crawl.yml commits to crawl-logs with [skip ci] to keep repo active", () => {
     const crawl = readWorkflowFiles().find(({ name }) => name === "crawl.yml");
     expect(crawl).toBeDefined();
