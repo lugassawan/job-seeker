@@ -20,7 +20,6 @@ export const COMPANY_SEEDS: CompanySeed[] = [
   // ─── EU Fintech ────────────────────────────────────────────────────
   { name: "Revolut", industry: "fintech", region: "eu" },
   { name: "Monzo", industry: "fintech", region: "eu" },
-  { name: "Checkout.com", industry: "fintech", region: "eu" },
   { name: "N26", industry: "fintech", region: "eu" },
   { name: "Klarna", industry: "fintech", region: "eu" },
   { name: "GoCardless", industry: "fintech", region: "eu" },
@@ -59,7 +58,7 @@ export const COMPANY_SEEDS: CompanySeed[] = [
   { name: "HashMicro", industry: "saas", region: "sea" },
   { name: "Mekari", industry: "saas", region: "sea" },
   { name: "Sleekr", industry: "saas", region: "sea" },
-  { name: "Paper.id", industry: "saas", region: "sea" },
+  { name: "Privy", industry: "saas", region: "sea" },
 
   // ─── US Devtools ───────────────────────────────────────────────────
   { name: "Datadog", industry: "devtools", region: "us" },

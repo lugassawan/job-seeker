@@ -132,8 +132,13 @@ describe("buildBoardUrl", () => {
     expect(buildBoardUrl("smartrecruiters", "grab")).toBe("https://jobs.smartrecruiters.com/grab");
   });
 
-  test("unknown platform → empty string", () => {
-    expect(buildBoardUrl("teamtailor", "foo")).toBe("");
+  test("unsupported platform (teamtailor/bamboohr/wordpress) throws", () => {
+    // These three platforms require a domain, not a slug. probeAts never
+    // returns them, so this branch is unreachable via seedMatchToDiscoveredCompany.
+    // The throw ensures future callers get a clear error rather than a silent "".
+    expect(() => buildBoardUrl("teamtailor", "foo")).toThrow(
+      'buildBoardUrl: unsupported platform "teamtailor"',
+    );
   });
 });
 
@@ -149,7 +154,7 @@ describe("seedMatchToDiscoveredCompany", () => {
     expect(result.name).toBe("Stripe");
     expect(result.sources).toBe("ATS Directory");
     expect(result.roleCount).toBe(0);
-    expect(result.locations).toBe("us");
+    expect(result.locations).toBe("United States");
     expect(result.size).toBe("");
     expect(result.remoteFriendly).toBe("Unknown");
     expect(result.atsPlatform).toBe("greenhouse");

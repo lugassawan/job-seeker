@@ -66,11 +66,12 @@ try {
 
     const discoveredDate = new Date().toISOString().slice(0, 10);
     const matched: DiscoveredCompany[] = [];
+    const probeErrors: string[] = [];
     let unmatched = 0;
 
     console.log("\nProbing ATS platforms...");
     for (const seed of candidates) {
-      const match = await probeAts(seed.name);
+      const match = await probeAts(seed.name, probeErrors);
       if (match) {
         matched.push(seedMatchToDiscoveredCompany(seed, match, discoveredDate));
         console.log(`  ✓ ${seed.name}: ${match.platform} (${match.token})`);
@@ -79,7 +80,15 @@ try {
       }
     }
 
-    console.log(`\nMatched: ${matched.length}, Unmatched (skipped): ${unmatched}`);
+    console.log(
+      `\nMatched: ${matched.length}, Unmatched: ${unmatched}, Probe errors: ${probeErrors.length}`,
+    );
+    if (probeErrors.length > 0) {
+      console.error(`\nProbe errors (network/timeout — may inflate unmatched count):`);
+      for (const e of probeErrors) {
+        console.error(`  - ${e}`);
+      }
+    }
     newCompanies = matched;
   } else {
     // ── Aggregator mode: crawl job boards ───────────────────────────

@@ -57,9 +57,15 @@ export function buildBoardUrl(platform: CompanyPlatform, token: string): string 
     case "smartrecruiters":
       return `https://jobs.smartrecruiters.com/${token}`;
     default:
-      return "";
+      throw new Error(`buildBoardUrl: unsupported platform "${platform}"`);
   }
 }
+
+const REGION_LABELS: Record<string, string> = {
+  us: "United States",
+  eu: "Europe",
+  sea: "Southeast Asia",
+};
 
 export function seedMatchToDiscoveredCompany(
   seed: CompanySeed,
@@ -70,7 +76,7 @@ export function seedMatchToDiscoveredCompany(
     name: seed.name,
     sources: "ATS Directory",
     roleCount: 0,
-    locations: seed.region,
+    locations: REGION_LABELS[seed.region] ?? seed.region,
     size: "",
     remoteFriendly: "Unknown",
     atsPlatform: match.platform,
