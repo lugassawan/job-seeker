@@ -25,6 +25,7 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Agoda", platform: "greenhouse", token: "agoda", size: "Enterprise" },
   { name: "Twilio", platform: "greenhouse", token: "twilio", size: "Enterprise" },
   { name: "Remote", platform: "greenhouse", token: "remotecom", size: "Enterprise" },
+  { name: "Imply", platform: "greenhouse", token: "imply", size: "Startup" },
 
   // Lever companies
   { name: "Netflix", platform: "lever", token: "netflix", size: "Enterprise" },
@@ -42,6 +43,9 @@ export const COMPANY_WATCHLIST: CompanyConfig[] = [
   { name: "Deel", platform: "ashby", token: "Deel", size: "Enterprise" },
   { name: "Pave", platform: "ashby", token: "PaveBank", size: "Startup" },
   { name: "Bespoke Labs", platform: "ashby", token: "bespokelabs", size: "Startup" },
+  { name: "Snowflake", platform: "ashby", token: "snowflake", size: "Enterprise" },
+  { name: "Perplexity AI", platform: "ashby", token: "perplexity", size: "Startup" },
+  { name: "Lavendo", platform: "ashby", token: "lavendo", size: "Startup" },
 
   // Workable companies
   {
