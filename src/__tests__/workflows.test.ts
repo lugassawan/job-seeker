@@ -19,7 +19,7 @@ describe("GitHub Actions workflows", () => {
     expect(violations.map((v) => v.name)).toEqual([]);
   });
 
-  // Smoke-check: crawl.yml must commit to crawl-logs/ with [skip ci] so GitHub does not
+  // Smoke-check: crawl.yml must add crawl-logs/ and commit with [skip ci] so GitHub does not
   // auto-disable the scheduled workflow after 60 days of repo inactivity.
   test("crawl.yml commits to crawl-logs with [skip ci] to keep repo active", () => {
     const crawl = readWorkflowFiles().find(({ name }) => name === "crawl.yml");
