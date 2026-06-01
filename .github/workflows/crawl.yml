@@ -9,6 +9,8 @@ jobs:
   crawl:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -18,9 +20,36 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      - run: bun run src/index.ts
+      - name: Run crawler
+        run: |
+          set -euo pipefail
+          bun run src/index.ts 2>&1 | tee /tmp/crawl-output.txt
         env:
           OPENWEBNINJA_API_KEY: ${{ secrets.OPENWEBNINJA_API_KEY }}
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SHEET_NAME: ${{ secrets.GOOGLE_SHEET_NAME }}
+
+      - name: Append run summary to weekly log
+        if: always()
+        run: |
+          set -euo pipefail
+          WEEK=$(date -u +%G-W%V)
+          mkdir -p crawl-logs
+          {
+            echo ""
+            echo "## $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            cat /tmp/crawl-output.txt 2>/dev/null || true
+          } >> "crawl-logs/${WEEK}.log"
+
+      - name: Commit weekly log
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git pull --rebase --autostash
+          git add crawl-logs/
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: crawl log $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          for i in 1 2 3; do git push && break; git pull --rebase --autostash; done || { echo "Push failed after 3 attempts" >&2; exit 1; }

@@ -45,7 +45,7 @@ Job crawler that runs on a schedule (GitHub Actions, every 6h). Crawls Software/
 
 **Skills extraction** (`src/utils/skills.ts`): ~100 regex patterns across categories (languages, frontend, backend, cloud/infra, data, ML/AI) applied to job descriptions.
 
-**Keepalive:** `.github/workflows/keepalive.yml` prevents GitHub from auto-disabling the scheduled crawl workflow due to repo inactivity.
+**Keepalive:** `crawl.yml` self-keeps the repo active by committing its run summary to a weekly `crawl-logs/<ISO-week>.log` file after every 6h run (with `[skip ci]` to avoid triggering `ci.yml`). This prevents GitHub from auto-disabling scheduled workflows due to inactivity.
 
 **CI:** `.github/workflows/ci.yml` runs format, lint, typecheck, and tests on push/PR to main.
 
