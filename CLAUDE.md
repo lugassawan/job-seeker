@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 bun start             # run the crawler
+bun run discover      # discover new companies (flags: --probe-ats, --directory, --industry=, --region=)
 bun test              # run all tests
 bun test src/__tests__/filter.test.ts  # run a single test file
 bun run typecheck     # tsc --noEmit
