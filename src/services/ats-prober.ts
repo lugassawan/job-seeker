@@ -63,7 +63,10 @@ async function tryProbe(url: string, validate: (data: unknown) => boolean): Prom
   const response = await fetch(url, {
     signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
   });
-  if (!response.ok) return false;
+  if (!response.ok) {
+    await response.body?.cancel();
+    return false;
+  }
   const data: unknown = await response.json();
   return validate(data);
   // Network/timeout errors propagate; caller decides how to handle them.
