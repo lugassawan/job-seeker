@@ -39,7 +39,7 @@ const PROBE_TARGETS: ProbeTarget[] = [
     buildUrl: (slug) => `https://apply.workable.com/api/v1/widget/accounts/${slug}`,
     validate: (data) => {
       const d = data as { jobs?: unknown[] };
-      return Array.isArray(d.jobs);
+      return Array.isArray(d.jobs) && d.jobs.length > 0;
     },
   },
   {
@@ -47,7 +47,7 @@ const PROBE_TARGETS: ProbeTarget[] = [
     buildUrl: (slug) => `https://api.smartrecruiters.com/v1/companies/${slug}/postings?limit=1`,
     validate: (data) => {
       const d = data as { content?: unknown[] };
-      return Array.isArray(d.content);
+      return Array.isArray(d.content) && d.content.length > 0;
     },
   },
 ];
