@@ -517,3 +517,44 @@ Errors (1):
   - Skillshare crawl failed: Lever API responded with status 404 for Skillshare
 
 === Job Crawler Complete ===
+
+## 2026-06-02T20:51:19Z
+=== Job Crawler Starting ===
+Time: 2026-06-02T20:36:12.360Z
+Existing jobs in sheet: 7464
+[Remotive] Found 0 jobs
+[RemoteOK] Found 0 jobs
+[Company-Direct] Found 0 jobs from GitLab
+[WeWorkRemotely] Found 0 jobs
+[Company-Direct] Found 8 jobs from Cloudflare
+[Company-Direct] Found 1 jobs from Figma
+[Company-Direct] Found 4 jobs from Stripe
+[Company-Direct] Found 0 jobs from Vercel
+[JapanDev] Found 0 jobs
+[Company-Direct] Found 0 jobs from Speechify
+[Company-Direct] Found 0 jobs from CircleCI
+[Company-Direct] Found 0 jobs from Consensys
+[Company-Direct] Found 0 jobs from Modern Health
+[Company-Direct] Found 0 jobs from ReCharge
+[Company-Direct] Found 1 jobs from Xendit
+[Company-Direct] Found 8 jobs from Agoda
+[Kalibrr] Query "software engineer": found 50 jobs (total: 1069)
+[Company-Direct] Found 11 jobs from Twilio
+[BankNeo] Found 0 jobs (0 total)
+[Company-Direct] Found 0 jobs from Remote
+[Company-Direct] Found 0 jobs from Imply
+[Kalibrr] Query "backend engineer": found 50 jobs (total: 1069)
+[Kalibrr] Query "fullstack developer": found 50 jobs (total: 1069)
+[Kalibrr] Total: 6 jobs from 3 queries
+[JSearch] Query "software engineer": found 10 jobs
+[TechInAsia] Found 11 jobs (total available: 355)
+[JSearch] Query "backend engineer": found 10 jobs
+[Blibli] Found 25 jobs (25 engineering out of 153 total)
+[JSearch] Query "fullstack developer": found 10 jobs
+[JSearch] Total: 30 jobs from 3 queries
+[Company-Direct] Error crawling Netflix: Unable to connect. Is the computer able to access the url?
+[Company-Direct] Error crawling Jobgether: Unable to connect. Is the computer able to access the url?
+[Company-Direct] Error crawling Kraken: Unable to connect. Is the computer able to access the url?
+[Company-Direct] Error crawling Medium: Unable to connect. Is the computer able to access the url?
+[Company-Direct] Error crawling Skillshare: Unable to connect. Is the computer able to access the url?
+[Company-Direct] Error crawling Tiket: Unable to connect. Is the computer able to access the url?
