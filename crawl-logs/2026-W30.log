@@ -719,3 +719,93 @@ Errors (5):
   - JSearch query "fullstack developer" failed: JSearch API responded with status 429 for query "fullstack developer"
 
 === Job Crawler Complete ===
+
+## 2026-07-22T01:51:14Z
+=== Job Crawler Starting ===
+Time: 2026-07-22T01:50:23.559Z
+Existing jobs in sheet: 10891
+[Remotive] Found 0 jobs
+[WeWorkRemotely] Found 0 jobs
+[Company-Direct] Found 3 jobs from GitLab
+[Company-Direct] Found 13 jobs from Cloudflare
+[RemoteOK] Found 0 jobs
+[Company-Direct] Found 0 jobs from Figma
+[JSearch] Error for query "software engineer": JSearch API responded with status 429 for query "software engineer"
+[JSearch] Error for query "backend engineer": JSearch API responded with status 429 for query "backend engineer"
+[Company-Direct] Found 138 jobs from Stripe
+[JapanDev] Found 0 jobs
+[JSearch] Error for query "fullstack developer": JSearch API responded with status 429 for query "fullstack developer"
+[JSearch] Total: 0 jobs from 3 queries
+[Company-Direct] Found 1 jobs from Vercel
+[Company-Direct] Found 153 jobs from Speechify
+[Company-Direct] Found 0 jobs from CircleCI
+[Company-Direct] Found 0 jobs from Consensys
+[Company-Direct] Found 7 jobs from Modern Health
+[Company-Direct] Error crawling ReCharge: Greenhouse API responded with status 404 for ReCharge
+[Kalibrr] Query "software engineer": found 50 jobs (total: 1072)
+[Company-Direct] Found 3 jobs from Xendit
+[Company-Direct] Found 87 jobs from Agoda
+[BankNeo] Found 0 jobs (0 total)
+[Company-Direct] Found 7 jobs from Twilio
+[Company-Direct] Found 0 jobs from Remote
+[Company-Direct] Found 0 jobs from Imply
+[Kalibrr] Query "backend engineer": found 50 jobs (total: 1072)
+[Kalibrr] Query "fullstack developer": found 50 jobs (total: 1072)
+[Kalibrr] Total: 6 jobs from 3 queries
+[Company-Direct] Found 0 jobs from Netflix
+[TechInAsia] Found 10 jobs (total available: 296)
+[Company-Direct] Found 326 jobs from Jobgether
+[Company-Direct] Found 0 jobs from Kraken
+[Company-Direct] Found 0 jobs from Medium
+[Company-Direct] Error crawling Skillshare: Lever API responded with status 404 for Skillshare
+[Company-Direct] Found 0 jobs from Tiket
+[Company-Direct] Found 2 jobs from Xsolla
+[Company-Direct] Found 0 jobs from Notion
+[Company-Direct] Found 0 jobs from Ramp
+[Company-Direct] Found 0 jobs from Linear
+[Company-Direct] Found 0 jobs from Deel
+[Company-Direct] Found 0 jobs from Pave
+[Company-Direct] Found 0 jobs from Bespoke Labs
+[Company-Direct] Found 0 jobs from Snowflake
+[Company-Direct] Found 0 jobs from Perplexity AI
+[Company-Direct] Found 0 jobs from Lavendo
+[Company-Direct] Found 0 jobs from Employment Hero
+[Company-Direct] Found 21 jobs from Ajaib
+[Company-Direct] Found 24 jobs from Stockbit
+[Company-Direct] Found 0 jobs from Traveloka
+[Company-Direct] Found 0 jobs from Dana
+[Company-Direct] Found 0 jobs from Halodoc
+[Company-Direct] Found 0 jobs from Kredivo
+[Company-Direct] Found 0 jobs from Mitrais
+[Company-Direct] Found 0 jobs from TabSquare
+[Company-Direct] Found 5 jobs from Grab
+[Blibli] Found 53 jobs (53 engineering out of 172 total)
+[Company-Direct] Found 7 jobs from Wise
+[Company-Direct] Found 0 jobs from Kata.ai
+[Company-Direct] Found 0 jobs from Carousell
+[Company-Direct] Found 2 jobs from Bookipi
+[Company-Direct] Found 0 jobs from Shippit
+RemoteOK: 0 jobs, 0 errors
+Remotive: 0 jobs, 0 errors
+Greenhouse: 799 jobs, 2 errors
+JapanDev: 0 jobs, 0 errors
+WeWorkRemotely: 0 jobs, 0 errors
+TechInAsia: 10 jobs, 0 errors
+Kalibrr: 6 jobs, 0 errors
+Blibli: 53 jobs, 0 errors
+BankNeo: 0 jobs, 0 errors
+JSearch: 0 jobs, 3 errors
+
+Total raw jobs collected: 868
+After filtering: 111 jobs
+After deduplication: 1 new jobs
+Appended 1 jobs to Google Sheets
+
+Errors (5):
+  - ReCharge crawl failed: Greenhouse API responded with status 404 for ReCharge
+  - Skillshare crawl failed: Lever API responded with status 404 for Skillshare
+  - JSearch query "software engineer" failed: JSearch API responded with status 429 for query "software engineer"
+  - JSearch query "backend engineer" failed: JSearch API responded with status 429 for query "backend engineer"
+  - JSearch query "fullstack developer" failed: JSearch API responded with status 429 for query "fullstack developer"
+
+=== Job Crawler Complete ===
