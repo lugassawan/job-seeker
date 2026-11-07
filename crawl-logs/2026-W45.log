@@ -1259,3 +1259,93 @@ Errors (5):
   - Tiket crawl failed: Lever API responded with status 404 for Tiket
 
 === Job Crawler Complete ===
+
+## 2026-11-07T03:52:24Z
+=== Job Crawler Starting ===
+Time: 2026-11-07T03:51:31.987Z
+Existing jobs in sheet: 18118
+[Remotive] Found 0 jobs
+[WeWorkRemotely] Found 0 jobs
+[Company-Direct] Found 76 jobs from GitLab
+[JapanDev] Found 0 jobs
+[Company-Direct] Found 17 jobs from Cloudflare
+[RemoteOK] Found 0 jobs
+[Company-Direct] Found 1 jobs from Figma
+[Company-Direct] Found 4 jobs from Stripe
+[Company-Direct] Found 5 jobs from Vercel
+[Kalibrr] Query "software engineer": found 50 jobs (total: 1964)
+[Company-Direct] Found 0 jobs from Speechify
+[BankNeo] Found 0 jobs (0 total)
+[Company-Direct] Found 1 jobs from CircleCI
+[Company-Direct] Found 0 jobs from Consensys
+[Company-Direct] Found 0 jobs from Modern Health
+[Company-Direct] Error crawling ReCharge: Greenhouse API responded with status 404 for ReCharge
+[Company-Direct] Found 7 jobs from Xendit
+[Kalibrr] Query "backend engineer": found 50 jobs (total: 1964)
+[Company-Direct] Found 19 jobs from Agoda
+[Company-Direct] Found 33 jobs from Twilio
+[Company-Direct] Found 0 jobs from Remote
+[Kalibrr] Query "fullstack developer": found 50 jobs (total: 1964)
+[Kalibrr] Total: 3 jobs from 3 queries
+[Company-Direct] Found 0 jobs from Imply
+[Company-Direct] Error crawling Netflix: Lever API responded with status 404 for Netflix
+[Company-Direct] Found 249 jobs from Jobgether
+[Company-Direct] Found 0 jobs from Kraken
+[Company-Direct] Error crawling Medium: Lever API responded with status 404 for Medium
+[Company-Direct] Error crawling Skillshare: Lever API responded with status 404 for Skillshare
+[Company-Direct] Error crawling Tiket: Lever API responded with status 404 for Tiket
+[Company-Direct] Found 0 jobs from Xsolla
+[Company-Direct] Found 0 jobs from Notion
+[Company-Direct] Found 0 jobs from Ramp
+[Company-Direct] Found 0 jobs from Linear
+[Company-Direct] Found 0 jobs from Deel
+[Company-Direct] Found 0 jobs from Pave
+[Company-Direct] Found 0 jobs from Bespoke Labs
+[Company-Direct] Found 0 jobs from Snowflake
+[Company-Direct] Found 0 jobs from Perplexity AI
+[Company-Direct] Found 0 jobs from Lavendo
+[Company-Direct] Found 0 jobs from Employment Hero
+[JSearch] Query "software engineer": found 10 jobs
+[Company-Direct] Found 29 jobs from Ajaib
+[TechInAsia] Found 17 jobs (total available: 299)
+[JSearch] Query "backend engineer": found 9 jobs
+[JSearch] Query "fullstack developer": found 5 jobs
+[JSearch] Total: 24 jobs from 3 queries
+[Company-Direct] Found 16 jobs from Stockbit
+[Company-Direct] Found 0 jobs from Traveloka
+[Company-Direct] Found 0 jobs from Dana
+[Company-Direct] Found 0 jobs from Halodoc
+[Company-Direct] Found 0 jobs from Kredivo
+[Company-Direct] Found 0 jobs from Mitrais
+[Company-Direct] Found 0 jobs from TabSquare
+[Company-Direct] Found 7 jobs from Grab
+[Company-Direct] Found 2 jobs from Wise
+[Company-Direct] Found 0 jobs from Kata.ai
+[Company-Direct] Found 1 jobs from Carousell
+[Company-Direct] Found 5 jobs from Bookipi
+[Company-Direct] Found 0 jobs from Shippit
+[Blibli] Found 73 jobs (73 engineering out of 200 total)
+RemoteOK: 0 jobs, 0 errors
+Remotive: 0 jobs, 0 errors
+Greenhouse: 472 jobs, 5 errors
+JapanDev: 0 jobs, 0 errors
+WeWorkRemotely: 0 jobs, 0 errors
+TechInAsia: 17 jobs, 0 errors
+Kalibrr: 3 jobs, 0 errors
+Blibli: 73 jobs, 0 errors
+BankNeo: 0 jobs, 0 errors
+JSearch: 24 jobs, 0 errors
+
+Total raw jobs collected: 589
+After filtering: 125 jobs
+After deduplication: 16 new jobs
+Appended 16 jobs to Google Sheets
+
+Errors (5):
+  - ReCharge crawl failed: Greenhouse API responded with status 404 for ReCharge
+  - Netflix crawl failed: Lever API responded with status 404 for Netflix
+  - Medium crawl failed: Lever API responded with status 404 for Medium
+  - Skillshare crawl failed: Lever API responded with status 404 for Skillshare
+  - Tiket crawl failed: Lever API responded with status 404 for Tiket
+
+=== Job Crawler Complete ===
